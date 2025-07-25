@@ -98,13 +98,13 @@
 
 /* Zawadi Brand Styling */
 .zawadi-header {
-  background: linear-gradient(135deg, hsl(var(--zawadi-deep-blue)), hsl(var(--zawadi-blue)));
-  @apply text-white shadow-lg;
+  background: linear-gradient(135deg, #1e293b, #334155);
+  @apply text-white shadow-lg border-b-2 border-slate-600;
 }
 
 .zawadi-sidebar {
-  background: linear-gradient(180deg, hsl(var(--zawadi-charcoal)), hsl(var(--zawadi-dark-slate)));
-  @apply text-white shadow-xl;
+  background: linear-gradient(180deg, #0f0f0f, #000000);
+  @apply text-white shadow-xl border-r-2 border-slate-500;
 }
 
 .zawadi-card {

@@ -101,8 +101,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             <div className="flex items-center space-x-3">
               <ZawadiLogo className="h-8 w-8 text-white" />
               <div>
-                <h1 className="text-xl font-bold text-white drop-shadow-sm">Zawadi Tracker</h1>
-                <p className="text-sm text-white/90 font-medium">Inventory Management</p>
+                <h1 className="text-xl font-extrabold text-white drop-shadow-lg">Zawadi Tracker</h1>
+                <p className="text-sm text-yellow-200 font-bold drop-shadow-sm">Inventory Management</p>
               </div>
             </div>
             <Button
@@ -130,16 +130,16 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   <Button
                     variant="ghost"
                     className={cn(
-                      "w-full justify-start relative text-white font-medium hover:bg-white/30 zawadi-animate-button",
-                      isActive && "bg-white/30 text-white font-bold",
-                      isStorageArea && getStorageAreaStyle(areaId)
+                      "w-full justify-start relative text-white font-bold text-base hover:bg-white/40 hover:text-yellow-200 zawadi-animate-button shadow-sm",
+                      isActive && "bg-white/40 text-yellow-300 font-extrabold shadow-md border-l-4 border-yellow-400",
+                      !isActive && "text-white"
                     )}
                     onClick={() => onClose()}
                     data-testid={`link-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
                   >
                     <div className="flex items-center">
-                      {link.icon}
-                      <span className="ml-3">{link.label}</span>
+                      <div className="text-white drop-shadow-sm">{link.icon}</div>
+                      <span className="ml-3 text-white font-bold drop-shadow-sm">{link.label}</span>
                     </div>
                     {link.badge !== null && link.badge > 0 && (
                       <Badge

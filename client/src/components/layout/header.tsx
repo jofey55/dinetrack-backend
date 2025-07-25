@@ -21,7 +21,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden"
+              className="lg:hidden text-white hover:bg-white/30"
               onClick={onMenuClick}
               data-testid="button-menu"
             >
@@ -30,8 +30,8 @@ export default function Header({ onMenuClick }: HeaderProps) {
             <div className="hidden lg:flex items-center space-x-3">
               <ZawadiLogo className="h-8 w-8 text-white" />
               <div>
-                <h1 className="text-lg font-bold text-white drop-shadow-sm">Zawadi Inventory Tracker</h1>
-                <p className="text-sm text-white/90 font-medium">Professional Restaurant Management</p>
+                <h1 className="text-lg font-extrabold text-white drop-shadow-lg">Zawadi Inventory Tracker</h1>
+                <p className="text-sm text-yellow-200 font-bold drop-shadow-sm">Professional Restaurant Management</p>
               </div>
             </div>
             <div className="relative">
@@ -55,7 +55,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
               <Plus className="w-4 h-4 mr-2" />
               Add Item
             </Button>
-            <Button variant="ghost" size="icon" className="text-white hover:bg-white/20" data-testid="button-notifications">
+            <Button variant="ghost" size="icon" className="text-white hover:bg-white/30 font-bold" data-testid="button-notifications">
               <Bell className="w-5 h-5" />
             </Button>
           </div>
