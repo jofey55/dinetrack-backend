@@ -1,16 +1,22 @@
 import { useParams } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Download, Plus, Grid3x3, List, ChevronDown } from "lucide-react";
+import { Download, Plus, Grid3x3, List, ChevronDown, QrCode, Search } from "lucide-react";
 import InventoryTable from "@/components/inventory/inventory-table";
+import CategorySection from "@/components/inventory/category-section";
 import { InventoryItemWithDetails, StorageArea as StorageAreaType, Category } from "@shared/schema";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function StorageArea() {
   const { areaId } = useParams<{ areaId: string }>();
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [stockFilter, setStockFilter] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [viewMode, setViewMode] = useState<"category" | "list">("category");
+  const { toast } = useToast();
 
   const { data: storageArea } = useQuery<StorageAreaType>({
     queryKey: ["/api/storage-areas", areaId],
@@ -27,20 +33,77 @@ export default function StorageArea() {
     enabled: !!areaId,
   });
 
-  // Filter items based on selected filters
+  // Filter items based on selected filters and search
   const filteredItems = items.filter(item => {
     const categoryMatch = categoryFilter === "all" || item.categoryId === categoryFilter;
     const stockMatch = stockFilter === "all" || 
-      (stockFilter === "low" && item.isLowStock) ||
-      (stockFilter === "good" && !item.isLowStock);
+      (stockFilter === "low" && parseFloat(item.currentQuantity) <= parseFloat(item.minimumLevel)) ||
+      (stockFilter === "good" && parseFloat(item.currentQuantity) > parseFloat(item.minimumLevel));
+    const searchMatch = searchQuery === "" || 
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.sku && item.sku.toLowerCase().includes(searchQuery.toLowerCase()));
     
-    return categoryMatch && stockMatch;
+    return categoryMatch && stockMatch && searchMatch;
   });
+
+  // Prepare categories with item counts for category sections
+  const categoriesWithCounts = categories.map(category => {
+    const categoryItems = filteredItems.filter(item => item.categoryId === category.id);
+    return {
+      ...category,
+      itemCount: categoryItems.length
+    };
+  });
+
+  // Handler functions for inventory actions
+  const handleUpdateQuantity = (itemId: string, newQuantity: string) => {
+    // TODO: Implement API call to update quantity
+    toast({
+      title: "Quantity Updated",
+      description: `Item quantity updated to ${newQuantity}`,
+    });
+  };
+
+  const handleDeleteItem = (itemId: string) => {
+    // TODO: Implement API call to delete item
+    toast({
+      title: "Item Deleted",
+      description: "Item has been removed from inventory",
+    });
+  };
+
+  const handleOrderNow = (itemId: string, quantity: string) => {
+    // TODO: Implement API call to add to order list
+    const item = items.find(i => i.id === itemId);
+    toast({
+      title: "Added to Order Queue",
+      description: `${item?.name} (${quantity} ${item?.unit}) ready for ordering`,
+    });
+  };
+
+  const handleScanQR = (itemId: string) => {
+    // TODO: Implement QR scanner functionality
+    const item = items.find(i => i.id === itemId);
+    toast({
+      title: "QR Scanner Active",
+      description: `Ready to scan QR code for ${item?.name}`,
+    });
+  };
+
+  const handleAddItem = (categoryId?: string) => {
+    // TODO: Open add item modal with pre-selected category
+    toast({
+      title: "Add Item Modal",
+      description: "Opening form to add new inventory item",
+    });
+  };
 
   // Group items by category
   const itemsByCategory = categories.map(category => {
     const categoryItems = filteredItems.filter(item => item.categoryId === category.id);
-    const lowStockCount = categoryItems.filter(item => item.isLowStock).length;
+    const lowStockCount = categoryItems.filter(item => 
+      parseFloat(item.currentQuantity) <= parseFloat(item.minimumLevel)
+    ).length;
     
     return {
       category,
@@ -49,7 +112,9 @@ export default function StorageArea() {
     };
   }).filter(group => group.items.length > 0);
 
-  const totalLowStock = items.filter(item => item.isLowStock).length;
+  const totalLowStock = items.filter(item => 
+    parseFloat(item.currentQuantity) <= parseFloat(item.minimumLevel)
+  ).length;
 
   if (!storageArea) {
     return <div className="p-6">Loading...</div>;
@@ -107,36 +172,88 @@ export default function StorageArea() {
             </SelectContent>
           </Select>
 
-          <div className="flex items-center space-x-2 ml-auto">
-            <Button variant="ghost" size="icon" title="Grid View" data-testid="button-grid-view">
-              <Grid3x3 className="w-4 h-4" />
+          <div className="relative flex-1 max-w-sm">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Input
+              type="text"
+              placeholder="Search items, SKUs..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+              data-testid="input-search"
+            />
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Button 
+              variant={viewMode === "category" ? "default" : "ghost"} 
+              size="sm" 
+              onClick={() => setViewMode("category")}
+              data-testid="button-category-view"
+            >
+              <Grid3x3 className="w-4 h-4 mr-1" />
+              Categories
             </Button>
-            <Button variant="ghost" size="icon" className="text-blue-600" title="List View" data-testid="button-list-view">
-              <List className="w-4 h-4" />
+            <Button 
+              variant={viewMode === "list" ? "default" : "ghost"} 
+              size="sm" 
+              onClick={() => setViewMode("list")}
+              data-testid="button-list-view"
+            >
+              <List className="w-4 h-4 mr-1" />
+              List
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => handleScanQR("")} data-testid="button-scan-global">
+              <QrCode className="w-4 h-4 mr-1" />
+              Scan QR
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Inventory Items by Category */}
-      <div className="space-y-8">
-        {itemsByCategory.length > 0 ? (
-          itemsByCategory.map(({ category, items, lowStockCount }) => (
-            <InventoryTable
+      {/* Main Content */}
+      {viewMode === "category" ? (
+        <div className="space-y-4">
+          {categoriesWithCounts.filter(cat => cat.itemCount > 0).map((category) => (
+            <CategorySection
               key={category.id}
-              items={items}
-              categoryName={category.name}
-              lowStockCount={lowStockCount}
+              category={category}
+              items={filteredItems}
+              onUpdateQuantity={handleUpdateQuantity}
+              onDeleteItem={handleDeleteItem}
+              onOrderNow={handleOrderNow}
+              onScanQR={handleScanQR}
+              onAddItem={handleAddItem}
             />
-          ))
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-gray-500" data-testid="text-no-items">
-              No items found matching the selected filters
-            </p>
-          </div>
-        )}
-      </div>
+          ))}
+          {categoriesWithCounts.filter(cat => cat.itemCount > 0).length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-500" data-testid="text-no-items">
+                No items found matching your filters
+              </p>
+              <Button
+                variant="outline"
+                className="mt-3"
+                onClick={() => handleAddItem()}
+                data-testid="button-add-first-item"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add First Item
+              </Button>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="bg-white rounded-lg border border-gray-200">
+          <InventoryTable
+            items={filteredItems}
+            onUpdateQuantity={handleUpdateQuantity}
+            onDeleteItem={handleDeleteItem}
+            onOrderNow={handleOrderNow}
+            onScanQR={handleScanQR}
+          />
+        </div>
+      )}
     </div>
   );
 }

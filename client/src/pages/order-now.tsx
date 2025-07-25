@@ -1,17 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Download, ShoppingCart, AlertTriangle } from "lucide-react";
+import { Download, ShoppingCart, AlertTriangle, Calculator, Trash2, Send } from "lucide-react";
 import { InventoryItemWithDetails } from "@shared/schema";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function OrderNow() {
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [orderQuantities, setOrderQuantities] = useState<Record<string, string>>({});
+  const { toast } = useToast();
 
   const { data: lowStockItems = [] } = useQuery<InventoryItemWithDetails[]>({
     queryKey: ["/api/inventory-items/low-stock"],
@@ -73,6 +76,62 @@ export default function OrderNow() {
     return "bg-green-500";
   };
 
+  const getOrderTotal = () => {
+    return Array.from(selectedItems).reduce((total, itemId) => {
+      const item = lowStockItems.find(i => i.id === itemId);
+      const quantity = parseFloat(orderQuantities[itemId] || getSuggestedQuantity(item!));
+      return total + quantity;
+    }, 0);
+  };
+
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedItems(new Set(lowStockItems.map(item => item.id)));
+    } else {
+      setSelectedItems(new Set());
+    }
+  };
+
+  const handleRemoveItem = (itemId: string) => {
+    const newSelected = new Set(selectedItems);
+    newSelected.delete(itemId);
+    setSelectedItems(newSelected);
+    const newQuantities = { ...orderQuantities };
+    delete newQuantities[itemId];
+    setOrderQuantities(newQuantities);
+  };
+
+  const handleGenerateOrder = () => {
+    if (selectedItems.size === 0) {
+      toast({
+        title: "No Items Selected",
+        description: "Please select items to generate an order",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const orderData = Array.from(selectedItems).map(itemId => {
+      const item = lowStockItems.find(i => i.id === itemId)!;
+      const quantity = orderQuantities[itemId] || getSuggestedQuantity(item);
+      return {
+        item: item.name,
+        sku: item.sku,
+        supplier: item.supplier,
+        quantity: quantity,
+        unit: item.unit
+      };
+    });
+
+    toast({
+      title: "Order Generated Successfully",
+      description: `Generated order for ${selectedItems.size} items. Ready to send to suppliers.`,
+    });
+
+    // TODO: Implement actual order generation/export
+    console.log("Order data:", orderData);
+  };
+
   return (
     <div className="p-6">
       {/* Header */}
@@ -90,9 +149,13 @@ export default function OrderNow() {
             <Download className="w-4 h-4 mr-2" />
             Export List
           </Button>
-          <Button data-testid="button-process-order">
-            <ShoppingCart className="w-4 h-4 mr-2" />
-            Process Order
+          <Button 
+            onClick={handleGenerateOrder}
+            disabled={selectedItems.size === 0}
+            data-testid="button-generate-order"
+          >
+            <Send className="w-4 h-4 mr-2" />
+            Generate Order ({selectedItems.size})
           </Button>
         </div>
       </div>

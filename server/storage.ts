@@ -115,6 +115,44 @@ export class MemStorage implements IStorage {
     categories.forEach(category => {
       this.categories.set(category.id, category);
     });
+
+    // Add sample inventory items
+    const inventoryItems: InventoryItem[] = [
+      // Dry Storage Items - Paper Goods
+      { id: "napkins", name: "Paper Napkins", sku: "PPR001", categoryId: "paper-goods", storageAreaId: "dry-storage", currentQuantity: "150", minimumLevel: "200", unit: "packs", supplier: "Restaurant Supply Co", lastUpdated: new Date() },
+      { id: "takeout-containers", name: "Takeout Containers", sku: "PPR002", categoryId: "paper-goods", storageAreaId: "dry-storage", currentQuantity: "45", minimumLevel: "100", unit: "packs", supplier: "Restaurant Supply Co", lastUpdated: new Date() },
+      
+      // Dry Storage Items - Dry Ingredients
+      { id: "flour", name: "All-Purpose Flour", sku: "DRY001", categoryId: "dry-ingredients", storageAreaId: "dry-storage", currentQuantity: "12", minimumLevel: "20", unit: "kg", supplier: "Baker's Wholesale", lastUpdated: new Date() },
+      { id: "sugar", name: "Granulated Sugar", sku: "DRY002", categoryId: "dry-ingredients", storageAreaId: "dry-storage", currentQuantity: "8", minimumLevel: "15", unit: "kg", supplier: "Baker's Wholesale", lastUpdated: new Date() },
+      { id: "rice", name: "Jasmine Rice", sku: "DRY003", categoryId: "dry-ingredients", storageAreaId: "dry-storage", currentQuantity: "18", minimumLevel: "25", unit: "kg", supplier: "Asian Imports", lastUpdated: new Date() },
+      
+      // Dry Storage Items - Canned Goods
+      { id: "tomatoes-canned", name: "Diced Tomatoes", sku: "CAN001", categoryId: "canned-goods", storageAreaId: "dry-storage", currentQuantity: "24", minimumLevel: "36", unit: "cans", supplier: "Food Distributors", lastUpdated: new Date() },
+      { id: "beans-black", name: "Black Beans", sku: "CAN002", categoryId: "canned-goods", storageAreaId: "dry-storage", currentQuantity: "8", minimumLevel: "18", unit: "cans", supplier: "Food Distributors", lastUpdated: new Date() },
+      
+      // Cold Storage Items - Fresh Produce
+      { id: "lettuce", name: "Iceberg Lettuce", sku: "PRD001", categoryId: "fresh-produce", storageAreaId: "cold-storage", currentQuantity: "12", minimumLevel: "18", unit: "heads", supplier: "Farm Fresh", lastUpdated: new Date() },
+      { id: "tomatoes", name: "Roma Tomatoes", sku: "PRD002", categoryId: "fresh-produce", storageAreaId: "cold-storage", currentQuantity: "6", minimumLevel: "12", unit: "kg", supplier: "Farm Fresh", lastUpdated: new Date() },
+      { id: "onions", name: "Yellow Onions", sku: "PRD003", categoryId: "fresh-produce", storageAreaId: "cold-storage", currentQuantity: "15", minimumLevel: "20", unit: "kg", supplier: "Farm Fresh", lastUpdated: new Date() },
+      
+      // Cold Storage Items - Dairy Products
+      { id: "milk", name: "Whole Milk", sku: "DAI001", categoryId: "dairy-products", storageAreaId: "cold-storage", currentQuantity: "8", minimumLevel: "15", unit: "liters", supplier: "Daily Dairy", lastUpdated: new Date() },
+      { id: "cheese-cheddar", name: "Cheddar Cheese", sku: "DAI002", categoryId: "dairy-products", storageAreaId: "cold-storage", currentQuantity: "3", minimumLevel: "6", unit: "kg", supplier: "Daily Dairy", lastUpdated: new Date() },
+      { id: "butter", name: "Unsalted Butter", sku: "DAI003", categoryId: "dairy-products", storageAreaId: "cold-storage", currentQuantity: "2", minimumLevel: "5", unit: "kg", supplier: "Daily Dairy", lastUpdated: new Date() },
+      
+      // Freezer Items - Frozen Meats
+      { id: "chicken-breast", name: "Chicken Breast", sku: "FMT001", categoryId: "frozen-meats", storageAreaId: "freezer", currentQuantity: "8", minimumLevel: "15", unit: "kg", supplier: "Fresh Meats Inc", lastUpdated: new Date() },
+      { id: "ground-beef", name: "Ground Beef", sku: "FMT002", categoryId: "frozen-meats", storageAreaId: "freezer", currentQuantity: "4", minimumLevel: "10", unit: "kg", supplier: "Fresh Meats Inc", lastUpdated: new Date() },
+      
+      // Freezer Items - Frozen Vegetables
+      { id: "peas-frozen", name: "Frozen Green Peas", sku: "FVG001", categoryId: "frozen-vegetables", storageAreaId: "freezer", currentQuantity: "6", minimumLevel: "12", unit: "kg", supplier: "Frozen Foods Ltd", lastUpdated: new Date() },
+      { id: "corn-frozen", name: "Frozen Corn", sku: "FVG002", categoryId: "frozen-vegetables", storageAreaId: "freezer", currentQuantity: "4", minimumLevel: "8", unit: "kg", supplier: "Frozen Foods Ltd", lastUpdated: new Date() }
+    ];
+
+    inventoryItems.forEach(item => {
+      this.inventoryItems.set(item.id, item);
+    });
   }
 
   // User methods
