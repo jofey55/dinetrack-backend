@@ -24,17 +24,17 @@ export default function StorageArea() {
   const [showAddSubcategoryModal, setShowAddSubcategoryModal] = useState(false);
   const { toast } = useToast();
 
-  const { data: storageArea } = useQuery<StorageAreaType>({
+  const { data: storageArea, isLoading: isLoadingArea } = useQuery<StorageAreaType>({
     queryKey: ["/api/storage-areas", areaId],
     enabled: !!areaId,
   });
 
-  const { data: items = [] } = useQuery<InventoryItemWithDetails[]>({
-    queryKey: ["/api/inventory-items", areaId],
+  const { data: items = [], isLoading: isLoadingItems } = useQuery<InventoryItemWithDetails[]>({
+    queryKey: ["/api/inventory-items", areaId],  
     enabled: !!areaId,
   });
 
-  const { data: categories = [] } = useQuery<Category[]>({
+  const { data: categories = [], isLoading: isLoadingCategories } = useQuery<Category[]>({
     queryKey: ["/api/categories", areaId],
     enabled: !!areaId,
   });
@@ -157,8 +157,26 @@ export default function StorageArea() {
     }
   };
 
+  // Only show loading if we don't have essential data yet
+  if (!areaId || (isLoadingArea && !storageArea)) {
+    return (
+      <div className="p-6 flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading storage area...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!storageArea) {
-    return <div className="p-6">Loading...</div>;
+    return (
+      <div className="p-6 flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <p className="text-red-600">Storage area not found</p>
+        </div>
+      </div>
+    );
   }
 
   return (
