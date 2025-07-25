@@ -22,6 +22,32 @@ export default function Dashboard() {
     queryKey: ["/api/storage-areas/with-stats"],
   });
 
+  const getStorageAreaCardStyle = (areaId: string) => {
+    switch (areaId) {
+      case "dry-storage":
+        return "storage-area-card-dry";
+      case "cold-storage":
+        return "storage-area-card-cold";
+      case "freezer":
+        return "storage-area-card-freezer";
+      default:
+        return "zawadi-card";
+    }
+  };
+
+  const getStorageAreaTextStyle = (areaId: string) => {
+    switch (areaId) {
+      case "dry-storage":
+        return "text-amber-900 font-bold";
+      case "cold-storage":
+        return "text-blue-900 font-bold";
+      case "freezer":
+        return "text-purple-900 font-bold";
+      default:
+        return "text-foreground";
+    }
+  };
+
   const statsCards = [
     {
       title: "Total Items",
@@ -93,43 +119,42 @@ export default function Dashboard() {
       {/* Storage Areas Quick View */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         {storageAreas.map((area) => (
-          <Card key={area.id} data-testid={`card-storage-${area.id}`}>
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-lg" data-testid={`text-area-name-${area.id}`}>
+          <div key={area.id} className={`p-6 ${getStorageAreaCardStyle(area.id)}`} data-testid={`card-storage-${area.id}`}>
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className={`text-xl font-bold ${getStorageAreaTextStyle(area.id)}`} data-testid={`text-area-name-${area.id}`}>
                   {area.name}
-                </CardTitle>
+                </h3>
                 {area.lowStockCount > 0 && (
-                  <span className="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full" data-testid={`badge-low-count-${area.id}`}>
+                  <span className="bg-red-600 text-white text-sm font-bold px-3 py-1.5 rounded-full shadow-lg" data-testid={`badge-low-count-${area.id}`}>
                     {area.lowStockCount} Low
                   </span>
                 )}
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
+              
+              <div className="space-y-3 mb-6">
                 {area.categories.slice(0, 3).map((category) => (
-                  <div key={category.id} className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600" data-testid={`text-category-${category.id}`}>
+                  <div key={category.id} className="flex items-center justify-between bg-white/20 backdrop-blur-sm rounded-lg p-3 border border-white/30">
+                    <span className={`font-medium ${getStorageAreaTextStyle(area.id)}`} data-testid={`text-category-${category.id}`}>
                       {category.name}
                     </span>
-                    <span className="font-medium" data-testid={`text-item-count-${category.id}`}>
+                    <span className={`font-bold ${getStorageAreaTextStyle(area.id)}`} data-testid={`text-item-count-${category.id}`}>
                       {category.itemCount} items
                     </span>
                   </div>
                 ))}
               </div>
+              
               <Link href={`/storage/${area.id}`}>
                 <Button 
-                  variant="outline" 
-                  className="w-full mt-6 hover:bg-gray-50"
+                  className="w-full bg-white/90 hover:bg-white text-slate-800 font-semibold py-3 rounded-lg shadow-lg hover:scale-105 transition-all duration-200"
                   data-testid={`button-view-details-${area.id}`}
                 >
                   View Details
                 </Button>
               </Link>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         ))}
       </div>
 
