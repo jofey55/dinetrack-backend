@@ -98,8 +98,8 @@
 
 /* Zawadi Brand Styling */
 .zawadi-header {
-  background: linear-gradient(135deg, #1e293b, #334155);
-  @apply text-white shadow-lg border-b-2 border-slate-600;
+  background: linear-gradient(135deg, hsl(var(--zawadi-blue)), hsl(var(--zawadi-deep-blue)));
+  @apply text-white shadow-xl backdrop-blur-sm border-b border-white/20;
 }
 
 .zawadi-sidebar {
@@ -172,6 +172,20 @@
 /* Button Animations */
 .zawadi-animate-button {
   @apply transition-all duration-200 hover:scale-105 active:scale-95;
+}
+
+/* Modern Header Styling */
+.modern-header-glass {
+  backdrop-filter: blur(20px);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(79, 70, 229, 0.95));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
+}
+
+.header-logo-container {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Sticky Header */
