@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { sql, relations } from "drizzle-orm";
 import { pgTable, text, varchar, integer, decimal, timestamp, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -42,6 +42,39 @@ export const orderItems = pgTable("order_items", {
   isSelected: boolean("is_selected").default(true),
   createdAt: timestamp("created_at").defaultNow(),
 });
+
+// Relations
+export const storageAreasRelations = relations(storageAreas, ({ many }) => ({
+  categories: many(categories),
+  inventoryItems: many(inventoryItems),
+}));
+
+export const categoriesRelations = relations(categories, ({ one, many }) => ({
+  storageArea: one(storageAreas, {
+    fields: [categories.storageAreaId],
+    references: [storageAreas.id],
+  }),
+  inventoryItems: many(inventoryItems),
+}));
+
+export const inventoryItemsRelations = relations(inventoryItems, ({ one, many }) => ({
+  category: one(categories, {
+    fields: [inventoryItems.categoryId],
+    references: [categories.id],
+  }),
+  storageArea: one(storageAreas, {
+    fields: [inventoryItems.storageAreaId],
+    references: [storageAreas.id],
+  }),
+  orderItems: many(orderItems),
+}));
+
+export const orderItemsRelations = relations(orderItems, ({ one }) => ({
+  inventoryItem: one(inventoryItems, {
+    fields: [orderItems.inventoryItemId],
+    references: [inventoryItems.id],
+  }),
+}));
 
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).pick({
