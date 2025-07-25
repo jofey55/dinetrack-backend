@@ -29,6 +29,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/storage-areas/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const storageArea = await storage.getStorageAreaById(id);
+      if (storageArea) {
+        res.json(storageArea);
+      } else {
+        res.status(404).json({ message: "Storage area not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch storage area" });
+    }
+  });
+
   app.post("/api/storage-areas", async (req, res) => {
     try {
       const validatedData = insertStorageAreaSchema.parse(req.body);
