@@ -128,17 +128,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/inventory-items/:id", async (req, res) => {
+  app.get("/api/inventory-items/:storageAreaId", async (req, res) => {
     try {
-      const { id } = req.params;
-      const item = await storage.getInventoryItemById(id);
-      if (item) {
-        res.json(item);
-      } else {
-        res.status(404).json({ message: "Inventory item not found" });
-      }
+      const { storageAreaId } = req.params;
+      const items = await storage.getInventoryItemsByStorageArea(storageAreaId);
+      res.json(items);
     } catch (error) {
-      res.status(500).json({ message: "Failed to fetch inventory item" });
+      res.status(500).json({ message: "Failed to fetch inventory items" });
     }
   });
 

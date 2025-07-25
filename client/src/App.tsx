@@ -7,6 +7,7 @@ import NotFound from "@/pages/not-found";
 import Dashboard from "./pages/dashboard";
 import StorageArea from "./pages/storage-area";
 import OrderNow from "./pages/order-now";
+import Reports from "./pages/reports";
 import Sidebar from "@/components/layout/sidebar";
 import Header from "@/components/layout/header";
 import { useState } from "react";
@@ -17,6 +18,7 @@ function Router() {
       <Route path="/" component={Dashboard} />
       <Route path="/storage/:areaId" component={StorageArea} />
       <Route path="/order-now" component={OrderNow} />
+      <Route path="/reports" component={Reports} />
       <Route component={NotFound} />
     </Switch>
   );

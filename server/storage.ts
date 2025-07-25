@@ -219,14 +219,25 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getCategoriesWithSubcategories(storageAreaId?: string): Promise<any[]> {
-    const query = db.query.categories.findMany({
-      where: storageAreaId ? eq(categories.storageAreaId, storageAreaId) : undefined,
-      with: {
-        subcategories: true,
-        parentCategory: true,
-      },
-    });
-    return await query;
+    const whereClause = storageAreaId 
+      ? eq(categories.storageAreaId, storageAreaId)
+      : undefined;
+
+    // Get all categories for the storage area (or all if no filter)
+    const allCategories = whereClause
+      ? await db.select().from(categories).where(whereClause)
+      : await db.select().from(categories);
+
+    // Get only parent categories (parentCategoryId is null)
+    const parentCategories = allCategories.filter(cat => cat.parentCategoryId === null);
+
+    // For each parent category, find its subcategories
+    const result = parentCategories.map(parent => ({
+      ...parent,
+      subcategories: allCategories.filter(cat => cat.parentCategoryId === parent.id)
+    }));
+
+    return result;
   }
 
   async createCategory(insertCategory: InsertCategory): Promise<Category> {

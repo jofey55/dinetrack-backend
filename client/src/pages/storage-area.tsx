@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import AddCategoryModal from "@/components/forms/add-category-modal";
 import AddItemModal from "@/components/forms/add-item-modal";
+import AddSubcategoryModal from "@/components/forms/add-subcategory-modal";
 
 export default function StorageArea() {
   const { areaId } = useParams<{ areaId: string }>();
@@ -20,6 +21,7 @@ export default function StorageArea() {
   const [viewMode, setViewMode] = useState<"category" | "list">("category");
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
   const [showAddItemModal, setShowAddItemModal] = useState(false);
+  const [showAddSubcategoryModal, setShowAddSubcategoryModal] = useState(false);
   const { toast } = useToast();
 
   const { data: storageArea } = useQuery<StorageAreaType>({
@@ -177,9 +179,30 @@ export default function StorageArea() {
               <Download className="w-4 h-4 mr-2" />
               Export
             </Button>
-            <Button className="zawadi-button-primary zawadi-animate-button" data-testid="button-add-category">
+            <Button 
+              onClick={() => setShowAddCategoryModal(true)}
+              className="zawadi-button-primary zawadi-animate-button" 
+              data-testid="button-add-category"
+            >
               <Plus className="w-4 h-4 mr-2" />
               Add Category
+            </Button>
+            <Button 
+              onClick={() => setShowAddSubcategoryModal(true)}
+              variant="outline"
+              className="zawadi-animate-button hover:bg-blue-50 border-blue-200" 
+              data-testid="button-add-subcategory"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Subcategory
+            </Button>
+            <Button 
+              onClick={() => setShowAddItemModal(true)}
+              className="zawadi-button-secondary zawadi-animate-button" 
+              data-testid="button-add-item"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Item
             </Button>
           </div>
         </div>
@@ -307,6 +330,11 @@ export default function StorageArea() {
       <AddItemModal
         open={showAddItemModal}
         onOpenChange={setShowAddItemModal}
+        selectedStorageAreaId={areaId}
+      />
+      <AddSubcategoryModal
+        open={showAddSubcategoryModal}
+        onOpenChange={setShowAddSubcategoryModal}
         selectedStorageAreaId={areaId}
       />
     </div>
