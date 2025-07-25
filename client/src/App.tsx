@@ -28,7 +28,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <div className="min-h-screen flex bg-gray-50">
+        <div className="min-h-screen flex bg-background dark:bg-background">
           <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
           <div className="flex-1 lg:ml-64">
             <Header onMenuClick={() => setSidebarOpen(true)} />

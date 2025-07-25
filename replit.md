@@ -1,12 +1,13 @@
-# Restaurant Inventory Management System
+# Zawadi Inventory Tracker
 
 ## Overview
 
-This is a full-stack web application designed for restaurant inventory tracking and management. The system allows restaurants to manage multiple storage areas (dry storage, cold storage, freezer) with customizable categories and automated reorder alerts when items fall below minimum stock levels.
+This is a professional restaurant inventory management system designed for Zawadi Center. The application features comprehensive inventory tracking across multiple storage areas (dry storage, cold storage, freezer) with color-coded organization, automated reorder alerts, and PostgreSQL database persistence. The system includes professional branding with the Zawadi logo and enhanced visual design.
 
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Design preferences: Color-coded interface with professional branding, enhanced visual appeal with gradients and storage area specific color themes.
 
 ## System Architecture
 
@@ -20,11 +21,12 @@ Preferred communication style: Simple, everyday language.
 
 ### Backend Architecture
 - **Runtime**: Node.js with Express.js server
-- **Database**: PostgreSQL with Drizzle ORM
+- **Database**: PostgreSQL with Drizzle ORM (fully migrated from in-memory storage)
 - **Database Provider**: Neon Database (serverless PostgreSQL)
 - **API Design**: RESTful API endpoints
 - **Validation**: Zod schemas for request/response validation
 - **Development**: Hot module replacement with Vite middleware integration
+- **Storage**: DatabaseStorage class with comprehensive CRUD operations
 
 ### Project Structure
 ```
@@ -52,11 +54,12 @@ Preferred communication style: Simple, everyday language.
 6. **Dashboard Analytics**: Overview statistics and low stock alerts
 
 ### Frontend Components
-- **Layout System**: Responsive sidebar navigation with mobile support
-- **Dashboard**: Statistics overview with visual cards and quick access
-- **Storage Area Views**: Detailed inventory management per storage location
-- **Inventory Tables**: Interactive tables for quantity updates and item management
+- **Layout System**: Responsive sidebar navigation with mobile support and Zawadi branding
+- **Dashboard**: Color-coded statistics overview with gradient cards and visual indicators
+- **Storage Area Views**: Color-themed inventory management per storage location (yellow=dry, blue=cold, purple=freezer)
+- **Inventory Tables**: Interactive tables with color-coded stock status indicators
 - **Modals/Forms**: Add new items, categories, and storage areas
+- **Branding**: Custom Zawadi logo component and professional color scheme
 
 ## Data Flow
 

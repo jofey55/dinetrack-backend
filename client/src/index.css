@@ -3,57 +3,67 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(0, 0%, 100%);
-  --foreground: hsl(20, 14.3%, 4.1%);
-  --muted: hsl(60, 4.8%, 95.9%);
-  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --background: hsl(0, 0%, 98%);
+  --foreground: hsl(215, 25%, 27%);
+  --muted: hsl(210, 25%, 93%);
+  --muted-foreground: hsl(215, 15%, 55%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --popover-foreground: hsl(215, 25%, 27%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(20, 14.3%, 4.1%);
-  --border: hsl(20, 5.9%, 90%);
-  --input: hsl(20, 5.9%, 90%);
-  --primary: hsl(207, 90%, 54%);
-  --primary-foreground: hsl(211, 100%, 99%);
-  --secondary: hsl(60, 4.8%, 95.9%);
-  --secondary-foreground: hsl(24, 9.8%, 10%);
-  --accent: hsl(60, 4.8%, 95.9%);
-  --accent-foreground: hsl(24, 9.8%, 10%);
-  --destructive: hsl(0, 84.2%, 60.2%);
-  --destructive-foreground: hsl(60, 9.1%, 97.8%);
-  --ring: hsl(20, 14.3%, 4.1%);
-  --radius: 0.5rem;
-  --success: hsl(142, 71%, 45%);
+  --card-foreground: hsl(215, 25%, 27%);
+  --border: hsl(210, 20%, 88%);
+  --input: hsl(210, 20%, 92%);
+  --primary: hsl(218, 80%, 56%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(210, 25%, 93%);
+  --secondary-foreground: hsl(215, 25%, 27%);
+  --accent: hsl(210, 40%, 96%);
+  --accent-foreground: hsl(215, 25%, 27%);
+  --destructive: hsl(0, 72%, 51%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(218, 80%, 56%);
+  --radius: 0.75rem;
+  --success: hsl(142, 76%, 36%);
   --success-foreground: hsl(0, 0%, 100%);
-  --warning: hsl(35, 91%, 48%);
+  --warning: hsl(35, 91%, 55%);
   --warning-foreground: hsl(0, 0%, 100%);
+  --info: hsl(199, 89%, 48%);
+  --info-foreground: hsl(0, 0%, 100%);
+  --dry-storage: hsl(45, 85%, 60%);
+  --cold-storage: hsl(200, 85%, 60%);
+  --freezer: hsl(260, 85%, 60%);
 }
 
 .dark {
-  --background: hsl(240, 10%, 3.9%);
-  --foreground: hsl(0, 0%, 98%);
-  --muted: hsl(240, 3.7%, 15.9%);
-  --muted-foreground: hsl(240, 5%, 64.9%);
-  --popover: hsl(240, 10%, 3.9%);
-  --popover-foreground: hsl(0, 0%, 98%);
-  --card: hsl(240, 10%, 3.9%);
-  --card-foreground: hsl(0, 0%, 98%);
-  --border: hsl(240, 3.7%, 15.9%);
-  --input: hsl(240, 3.7%, 15.9%);
-  --primary: hsl(207, 90%, 54%);
-  --primary-foreground: hsl(211, 100%, 99%);
-  --secondary: hsl(240, 3.7%, 15.9%);
-  --secondary-foreground: hsl(0, 0%, 98%);
-  --accent: hsl(240, 3.7%, 15.9%);
-  --accent-foreground: hsl(0, 0%, 98%);
-  --destructive: hsl(0, 62.8%, 30.6%);
-  --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(240, 4.9%, 83.9%);
-  --radius: 0.5rem;
-  --success: hsl(142, 71%, 45%);
+  --background: hsl(215, 28%, 9%);
+  --foreground: hsl(0, 0%, 95%);
+  --muted: hsl(215, 20%, 15%);
+  --muted-foreground: hsl(215, 10%, 65%);
+  --popover: hsl(215, 28%, 12%);
+  --popover-foreground: hsl(0, 0%, 95%);
+  --card: hsl(215, 28%, 12%);
+  --card-foreground: hsl(0, 0%, 95%);
+  --border: hsl(215, 20%, 18%);
+  --input: hsl(215, 20%, 18%);
+  --primary: hsl(218, 80%, 56%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(215, 20%, 15%);
+  --secondary-foreground: hsl(0, 0%, 95%);
+  --accent: hsl(215, 20%, 15%);
+  --accent-foreground: hsl(0, 0%, 95%);
+  --destructive: hsl(0, 72%, 51%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(218, 80%, 56%);
+  --radius: 0.75rem;
+  --success: hsl(142, 76%, 36%);
   --success-foreground: hsl(0, 0%, 100%);
-  --warning: hsl(35, 91%, 48%);
+  --warning: hsl(35, 91%, 55%);
   --warning-foreground: hsl(0, 0%, 100%);
+  --info: hsl(199, 89%, 48%);
+  --info-foreground: hsl(0, 0%, 100%);
+  --dry-storage: hsl(45, 85%, 60%);
+  --cold-storage: hsl(200, 85%, 60%);
+  --freezer: hsl(260, 85%, 60%);
 }
 
 @layer base {
@@ -64,4 +74,41 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
   }
+}
+
+/* Custom storage area color coding */
+.storage-area-dry {
+  @apply border-l-4 border-l-yellow-500 bg-yellow-50 dark:bg-yellow-950/20;
+}
+
+.storage-area-cold {
+  @apply border-l-4 border-l-blue-500 bg-blue-50 dark:bg-blue-950/20;
+}
+
+.storage-area-freezer {
+  @apply border-l-4 border-l-purple-500 bg-purple-50 dark:bg-purple-950/20;
+}
+
+.category-badge-dry {
+  @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300;
+}
+
+.category-badge-cold {
+  @apply bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300;
+}
+
+.category-badge-freezer {
+  @apply bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300;
+}
+
+.inventory-row-low-stock {
+  @apply bg-red-50 dark:bg-red-950/20 border-l-4 border-l-red-500;
+}
+
+.inventory-row-out-of-stock {
+  @apply bg-red-100 dark:bg-red-950/40 border-l-4 border-l-red-600;
+}
+
+.inventory-row-good-stock {
+  @apply bg-green-50 dark:bg-green-950/20 border-l-4 border-l-green-500;
 }
