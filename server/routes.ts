@@ -142,6 +142,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/inventory-items/search", async (req, res) => {
+    try {
+      const { barcode, sku, name } = req.query;
+      const items = await storage.searchInventoryItems({
+        barcode: barcode as string,
+        sku: sku as string, 
+        name: name as string,
+      });
+      res.json(items);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to search inventory items" });
+    }
+  });
+
   app.get("/api/inventory-items/:storageAreaId", async (req, res) => {
     try {
       const { storageAreaId } = req.params;

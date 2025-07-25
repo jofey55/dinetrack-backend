@@ -50,7 +50,7 @@ export interface IStorage {
   updateInventoryItem(id: string, updates: UpdateInventoryItem): Promise<InventoryItem | undefined>;
   deleteInventoryItem(id: string): Promise<boolean>;
   getLowStockItems(): Promise<InventoryItemWithDetails[]>;
-  searchInventoryItems(query: string): Promise<InventoryItemWithDetails[]>;
+  searchInventoryItems(filters: { barcode?: string; sku?: string; name?: string }): Promise<InventoryItemWithDetails[]>;
 
   // Dashboard methods
   getDashboardStats(): Promise<DashboardStats>;

@@ -30,6 +30,7 @@ export const inventoryItems = pgTable("inventory_items", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: text("name").notNull(),
   sku: text("sku"),
+  barcode: text("barcode"),
   categoryId: varchar("category_id").notNull(),
   storageAreaId: varchar("storage_area_id").notNull(),
   currentQuantity: decimal("current_quantity").notNull().default("0"),
