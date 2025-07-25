@@ -101,8 +101,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             <div className="flex items-center space-x-3">
               <ZawadiLogo className="h-8 w-8 text-white" />
               <div>
-                <h1 className="text-xl font-bold text-white">Zawadi Tracker</h1>
-                <p className="text-sm text-blue-200">Inventory Management</p>
+                <h1 className="text-xl font-bold text-white drop-shadow-sm">Zawadi Tracker</h1>
+                <p className="text-sm text-white/90 font-medium">Inventory Management</p>
               </div>
             </div>
             <Button
@@ -130,8 +130,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   <Button
                     variant="ghost"
                     className={cn(
-                      "w-full justify-start relative text-white hover:bg-white/20 zawadi-animate-button",
-                      isActive && "bg-white/20 text-white",
+                      "w-full justify-start relative text-white font-medium hover:bg-white/30 zawadi-animate-button",
+                      isActive && "bg-white/30 text-white font-bold",
                       isStorageArea && getStorageAreaStyle(areaId)
                     )}
                     onClick={() => onClose()}

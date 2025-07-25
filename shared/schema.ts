@@ -19,7 +19,11 @@ export const storageAreas = pgTable("storage_areas", {
 export const categories = pgTable("categories", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: text("name").notNull(),
+  description: text("description"),
+  color: text("color").default("#3b82f6"),
   storageAreaId: varchar("storage_area_id").notNull(),
+  parentCategoryId: varchar("parent_category_id"),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const inventoryItems = pgTable("inventory_items", {
@@ -53,6 +57,14 @@ export const categoriesRelations = relations(categories, ({ one, many }) => ({
   storageArea: one(storageAreas, {
     fields: [categories.storageAreaId],
     references: [storageAreas.id],
+  }),
+  parentCategory: one(categories, {
+    fields: [categories.parentCategoryId],
+    references: [categories.id],
+    relationName: "subcategories",
+  }),
+  subcategories: many(categories, {
+    relationName: "subcategories",
   }),
   inventoryItems: many(inventoryItems),
 }));
@@ -116,6 +128,11 @@ export type OrderItem = typeof orderItems.$inferSelect;
 export type InsertOrderItem = z.infer<typeof insertOrderItemSchema>;
 
 // Extended types for API responses
+export type CategoryWithSubcategories = Category & {
+  subcategories?: Category[];
+  parentCategory?: Category;
+};
+
 export type InventoryItemWithDetails = InventoryItem & {
   category: Category;
   storageArea: StorageArea;

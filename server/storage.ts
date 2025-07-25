@@ -37,6 +37,7 @@ export interface IStorage {
   // Category methods
   getCategoriesByStorageArea(storageAreaId: string): Promise<Category[]>;
   getAllCategories(): Promise<Category[]>;
+  getCategoriesWithSubcategories(storageAreaId?: string): Promise<any[]>;
   createCategory(category: InsertCategory): Promise<Category>;
   deleteCategory(id: string): Promise<boolean>;
 
@@ -113,34 +114,34 @@ export class DatabaseStorage implements IStorage {
 
       await db.insert(categories).values(categoryData);
 
-      // Add sample inventory items
+      // Add sample inventory items (will auto-generate UUIDs)
       const inventoryData: InsertInventoryItem[] = [
         // Dry Storage Items - Paper Goods
-        { id: "napkins", name: "Paper Napkins", sku: "PPR001", categoryId: "paper-goods", storageAreaId: "dry-storage", currentQuantity: "150", minimumLevel: "200", unit: "packs", supplier: "Restaurant Supply Co", lastUpdated: new Date() },
-        { id: "takeout-containers", name: "Takeout Containers", sku: "PPR002", categoryId: "paper-goods", storageAreaId: "dry-storage", currentQuantity: "45", minimumLevel: "100", unit: "packs", supplier: "Restaurant Supply Co", lastUpdated: new Date() },
+        { name: "Paper Napkins", sku: "PPR001", categoryId: "paper-goods", storageAreaId: "dry-storage", currentQuantity: "150", minimumLevel: "200", unit: "packs", supplier: "Restaurant Supply Co" },
+        { name: "Takeout Containers", sku: "PPR002", categoryId: "paper-goods", storageAreaId: "dry-storage", currentQuantity: "45", minimumLevel: "100", unit: "packs", supplier: "Restaurant Supply Co" },
         // Dry Ingredients
-        { id: "flour", name: "All-Purpose Flour", sku: "DRY001", categoryId: "dry-ingredients", storageAreaId: "dry-storage", currentQuantity: "25", minimumLevel: "50", unit: "kg", supplier: "Bulk Foods Inc", lastUpdated: new Date() },
-        { id: "sugar", name: "Granulated Sugar", sku: "DRY002", categoryId: "dry-ingredients", storageAreaId: "dry-storage", currentQuantity: "30", minimumLevel: "40", unit: "kg", supplier: "Bulk Foods Inc", lastUpdated: new Date() },
+        { name: "All-Purpose Flour", sku: "DRY001", categoryId: "dry-ingredients", storageAreaId: "dry-storage", currentQuantity: "25", minimumLevel: "50", unit: "kg", supplier: "Bulk Foods Inc" },
+        { name: "Granulated Sugar", sku: "DRY002", categoryId: "dry-ingredients", storageAreaId: "dry-storage", currentQuantity: "30", minimumLevel: "40", unit: "kg", supplier: "Bulk Foods Inc" },
         // Canned Goods
-        { id: "tomatoes-canned", name: "Canned Tomatoes", sku: "CAN001", categoryId: "canned-goods", storageAreaId: "dry-storage", currentQuantity: "24", minimumLevel: "36", unit: "cans", supplier: "Food Distributors Ltd", lastUpdated: new Date() },
-        { id: "beans-black", name: "Black Beans", sku: "CAN002", categoryId: "canned-goods", storageAreaId: "dry-storage", currentQuantity: "18", minimumLevel: "24", unit: "cans", supplier: "Food Distributors Ltd", lastUpdated: new Date() },
+        { name: "Canned Tomatoes", sku: "CAN001", categoryId: "canned-goods", storageAreaId: "dry-storage", currentQuantity: "24", minimumLevel: "36", unit: "cans", supplier: "Food Distributors Ltd" },
+        { name: "Black Beans", sku: "CAN002", categoryId: "canned-goods", storageAreaId: "dry-storage", currentQuantity: "18", minimumLevel: "24", unit: "cans", supplier: "Food Distributors Ltd" },
         
         // Cold Storage Items - Fresh Produce
-        { id: "lettuce", name: "Romaine Lettuce", sku: "PRD001", categoryId: "fresh-produce", storageAreaId: "cold-storage", currentQuantity: "12", minimumLevel: "18", unit: "heads", supplier: "Fresh Farm Co", lastUpdated: new Date() },
-        { id: "tomatoes-fresh", name: "Fresh Tomatoes", sku: "PRD002", categoryId: "fresh-produce", storageAreaId: "cold-storage", currentQuantity: "8", minimumLevel: "15", unit: "kg", supplier: "Fresh Farm Co", lastUpdated: new Date() },
+        { name: "Romaine Lettuce", sku: "PRD001", categoryId: "fresh-produce", storageAreaId: "cold-storage", currentQuantity: "12", minimumLevel: "18", unit: "heads", supplier: "Fresh Farm Co" },
+        { name: "Fresh Tomatoes", sku: "PRD002", categoryId: "fresh-produce", storageAreaId: "cold-storage", currentQuantity: "8", minimumLevel: "15", unit: "kg", supplier: "Fresh Farm Co" },
         // Dairy Products
-        { id: "milk", name: "Whole Milk", sku: "DAI001", categoryId: "dairy-products", storageAreaId: "cold-storage", currentQuantity: "6", minimumLevel: "12", unit: "liters", supplier: "Dairy Co", lastUpdated: new Date() },
-        { id: "cheese-cheddar", name: "Cheddar Cheese", sku: "DAI002", categoryId: "dairy-products", storageAreaId: "cold-storage", currentQuantity: "3", minimumLevel: "5", unit: "kg", supplier: "Dairy Co", lastUpdated: new Date() },
+        { name: "Whole Milk", sku: "DAI001", categoryId: "dairy-products", storageAreaId: "cold-storage", currentQuantity: "6", minimumLevel: "12", unit: "liters", supplier: "Dairy Co" },
+        { name: "Cheddar Cheese", sku: "DAI002", categoryId: "dairy-products", storageAreaId: "cold-storage", currentQuantity: "3", minimumLevel: "5", unit: "kg", supplier: "Dairy Co" },
         // Sauces & Condiments
-        { id: "ketchup", name: "Ketchup", sku: "SAU001", categoryId: "sauces-condiments", storageAreaId: "cold-storage", currentQuantity: "4", minimumLevel: "8", unit: "bottles", supplier: "Condiment Corp", lastUpdated: new Date() },
-        { id: "mayo", name: "Mayonnaise", sku: "SAU002", categoryId: "sauces-condiments", storageAreaId: "cold-storage", currentQuantity: "2", minimumLevel: "6", unit: "jars", supplier: "Condiment Corp", lastUpdated: new Date() },
+        { name: "Ketchup", sku: "SAU001", categoryId: "sauces-condiments", storageAreaId: "cold-storage", currentQuantity: "4", minimumLevel: "8", unit: "bottles", supplier: "Condiment Corp" },
+        { name: "Mayonnaise", sku: "SAU002", categoryId: "sauces-condiments", storageAreaId: "cold-storage", currentQuantity: "2", minimumLevel: "6", unit: "jars", supplier: "Condiment Corp" },
         
         // Freezer Items - Frozen Meats
-        { id: "chicken-breast", name: "Chicken Breast", sku: "FMT001", categoryId: "frozen-meats", storageAreaId: "freezer", currentQuantity: "15", minimumLevel: "25", unit: "kg", supplier: "Meat Packers Inc", lastUpdated: new Date() },
-        { id: "ground-beef", name: "Ground Beef", sku: "FMT002", categoryId: "frozen-meats", storageAreaId: "freezer", currentQuantity: "8", minimumLevel: "20", unit: "kg", supplier: "Meat Packers Inc", lastUpdated: new Date() },
+        { name: "Chicken Breast", sku: "FMT001", categoryId: "frozen-meats", storageAreaId: "freezer", currentQuantity: "15", minimumLevel: "25", unit: "kg", supplier: "Meat Packers Inc" },
+        { name: "Ground Beef", sku: "FMT002", categoryId: "frozen-meats", storageAreaId: "freezer", currentQuantity: "8", minimumLevel: "20", unit: "kg", supplier: "Meat Packers Inc" },
         // Frozen Vegetables
-        { id: "peas-frozen", name: "Frozen Green Peas", sku: "FVG001", categoryId: "frozen-vegetables", storageAreaId: "freezer", currentQuantity: "6", minimumLevel: "12", unit: "kg", supplier: "Frozen Foods Ltd", lastUpdated: new Date() },
-        { id: "corn-frozen", name: "Frozen Corn", sku: "FVG002", categoryId: "frozen-vegetables", storageAreaId: "freezer", currentQuantity: "4", minimumLevel: "8", unit: "kg", supplier: "Frozen Foods Ltd", lastUpdated: new Date() }
+        { name: "Frozen Green Peas", sku: "FVG001", categoryId: "frozen-vegetables", storageAreaId: "freezer", currentQuantity: "6", minimumLevel: "12", unit: "kg", supplier: "Frozen Foods Ltd" },
+        { name: "Frozen Corn", sku: "FVG002", categoryId: "frozen-vegetables", storageAreaId: "freezer", currentQuantity: "4", minimumLevel: "8", unit: "kg", supplier: "Frozen Foods Ltd" }
       ];
 
       await db.insert(inventoryItems).values(inventoryData);
@@ -217,6 +218,17 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(categories);
   }
 
+  async getCategoriesWithSubcategories(storageAreaId?: string): Promise<any[]> {
+    const query = db.query.categories.findMany({
+      where: storageAreaId ? eq(categories.storageAreaId, storageAreaId) : undefined,
+      with: {
+        subcategories: true,
+        parentCategory: true,
+      },
+    });
+    return await query;
+  }
+
   async createCategory(insertCategory: InsertCategory): Promise<Category> {
     const [category] = await db.insert(categories).values(insertCategory).returning();
     return category;
@@ -252,7 +264,11 @@ export class DatabaseStorage implements IStorage {
       category: {
         id: categories.id,
         name: categories.name,
-        storageAreaId: categories.storageAreaId
+        description: categories.description,
+        color: categories.color,
+        storageAreaId: categories.storageAreaId,
+        parentCategoryId: categories.parentCategoryId,
+        createdAt: categories.createdAt
       },
       storageArea: {
         id: storageAreas.id,
@@ -269,7 +285,7 @@ export class DatabaseStorage implements IStorage {
     return items.map(item => ({
       ...item,
       isLowStock: parseFloat(item.currentQuantity) <= parseFloat(item.minimumLevel)
-    }));
+    })) as InventoryItemWithDetails[];
   }
 
   async getInventoryItemsByCategory(categoryId: string): Promise<InventoryItemWithDetails[]> {

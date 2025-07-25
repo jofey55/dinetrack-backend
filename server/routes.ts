@@ -52,6 +52,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/categories-with-subcategories/:storageAreaId?", async (req, res) => {
+    try {
+      const { storageAreaId } = req.params;
+      const categories = await storage.getCategoriesWithSubcategories(storageAreaId === 'all' ? undefined : storageAreaId);
+      res.json(categories);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch categories with subcategories" });
+    }
+  });
+
   app.post("/api/categories", async (req, res) => {
     try {
       const validatedData = insertCategorySchema.parse(req.body);

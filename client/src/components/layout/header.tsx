@@ -30,18 +30,18 @@ export default function Header({ onMenuClick }: HeaderProps) {
             <div className="hidden lg:flex items-center space-x-3">
               <ZawadiLogo className="h-8 w-8 text-white" />
               <div>
-                <h1 className="text-lg font-semibold text-white">Zawadi Inventory Tracker</h1>
-                <p className="text-sm text-blue-100">Professional Restaurant Management</p>
+                <h1 className="text-lg font-bold text-white drop-shadow-sm">Zawadi Inventory Tracker</h1>
+                <p className="text-sm text-white/90 font-medium">Professional Restaurant Management</p>
               </div>
             </div>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 w-4 h-4" />
               <Input
                 type="text"
                 placeholder="Search inventory items..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 w-64 lg:w-80 bg-white/90 border-white/20 placeholder:text-slate-400"
+                className="pl-10 w-64 lg:w-80 bg-white border-white/30 placeholder:text-slate-500 text-slate-700 font-medium"
                 data-testid="input-search"
               />
             </div>

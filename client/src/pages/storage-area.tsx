@@ -9,6 +9,8 @@ import CategorySection from "@/components/inventory/category-section";
 import { InventoryItemWithDetails, StorageArea as StorageAreaType, Category } from "@shared/schema";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import AddCategoryModal from "@/components/forms/add-category-modal";
+import AddItemModal from "@/components/forms/add-item-modal";
 
 export default function StorageArea() {
   const { areaId } = useParams<{ areaId: string }>();
@@ -16,6 +18,8 @@ export default function StorageArea() {
   const [stockFilter, setStockFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [viewMode, setViewMode] = useState<"category" | "list">("category");
+  const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
+  const [showAddItemModal, setShowAddItemModal] = useState(false);
   const { toast } = useToast();
 
   const { data: storageArea } = useQuery<StorageAreaType>({
@@ -91,11 +95,7 @@ export default function StorageArea() {
   };
 
   const handleAddItem = (categoryId?: string) => {
-    // TODO: Open add item modal with pre-selected category
-    toast({
-      title: "Add Item Modal",
-      description: "Opening form to add new inventory item",
-    });
+    setShowAddItemModal(true);
   };
 
   // Group items by category
@@ -297,6 +297,18 @@ export default function StorageArea() {
           />
         </div>
       )}
+
+      {/* Modals */}
+      <AddCategoryModal
+        open={showAddCategoryModal}
+        onOpenChange={setShowAddCategoryModal}
+        selectedStorageAreaId={areaId}
+      />
+      <AddItemModal
+        open={showAddItemModal}
+        onOpenChange={setShowAddItemModal}
+        selectedStorageAreaId={areaId}
+      />
     </div>
   );
 }
