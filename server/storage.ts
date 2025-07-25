@@ -304,6 +304,7 @@ export class DatabaseStorage implements IStorage {
       id: inventoryItems.id,
       name: inventoryItems.name,
       sku: inventoryItems.sku,
+      barcode: inventoryItems.barcode,
       categoryId: inventoryItems.categoryId,
       storageAreaId: inventoryItems.storageAreaId,
       currentQuantity: inventoryItems.currentQuantity,
@@ -331,7 +332,7 @@ export class DatabaseStorage implements IStorage {
     return items.map(item => ({
       ...item,
       isLowStock: parseFloat(item.currentQuantity) <= parseFloat(item.minimumLevel)
-    }));
+    })) as InventoryItemWithDetails[];
   }
 
   async getInventoryItemById(id: string): Promise<InventoryItem | undefined> {
@@ -362,6 +363,7 @@ export class DatabaseStorage implements IStorage {
       id: inventoryItems.id,
       name: inventoryItems.name,
       sku: inventoryItems.sku,
+      barcode: inventoryItems.barcode,
       categoryId: inventoryItems.categoryId,
       storageAreaId: inventoryItems.storageAreaId,
       currentQuantity: inventoryItems.currentQuantity,
@@ -389,14 +391,31 @@ export class DatabaseStorage implements IStorage {
     return items.map(item => ({
       ...item,
       isLowStock: true
-    }));
+    })) as InventoryItemWithDetails[];
   }
 
-  async searchInventoryItems(query: string): Promise<InventoryItemWithDetails[]> {
+  async searchInventoryItems(filters: { barcode?: string; sku?: string; name?: string }): Promise<InventoryItemWithDetails[]> {
+    const conditions = [];
+    
+    if (filters.barcode) {
+      conditions.push(eq(inventoryItems.barcode, filters.barcode));
+    }
+    if (filters.sku) {
+      conditions.push(like(inventoryItems.sku, `%${filters.sku}%`));
+    }
+    if (filters.name) {
+      conditions.push(like(inventoryItems.name, `%${filters.name}%`));
+    }
+    
+    if (conditions.length === 0) {
+      return [];
+    }
+
     const items = await db.select({
       id: inventoryItems.id,
       name: inventoryItems.name,
       sku: inventoryItems.sku,
+      barcode: inventoryItems.barcode,
       categoryId: inventoryItems.categoryId,
       storageAreaId: inventoryItems.storageAreaId,
       currentQuantity: inventoryItems.currentQuantity,
@@ -419,17 +438,12 @@ export class DatabaseStorage implements IStorage {
     .from(inventoryItems)
     .leftJoin(categories, eq(inventoryItems.categoryId, categories.id))
     .leftJoin(storageAreas, eq(inventoryItems.storageAreaId, storageAreas.id))
-    .where(
-      or(
-        like(inventoryItems.name, `%${query}%`),
-        like(inventoryItems.sku, `%${query}%`)
-      )
-    );
+    .where(or(...conditions));
     
     return items.map(item => ({
       ...item,
       isLowStock: parseFloat(item.currentQuantity) <= parseFloat(item.minimumLevel)
-    }));
+    })) as InventoryItemWithDetails[];
   }
 
   // Dashboard methods
@@ -447,13 +461,15 @@ export class DatabaseStorage implements IStorage {
     return {
       totalItems: allItems.length,
       lowStockItems: lowStockItems.length,
+      pendingOrders: 0,
+      wellStocked: allItems.length - lowStockItems.length - outOfStockItems.length,
       totalCategories: allCategories.length,
       totalStorageAreas: allStorageAreas.length,
       outOfStockItems: outOfStockItems.length,
       recentlyUpdated: allItems.filter(item => {
         const dayAgo = new Date();
         dayAgo.setDate(dayAgo.getDate() - 1);
-        return item.lastUpdated > dayAgo;
+        return item.lastUpdated && item.lastUpdated > dayAgo;
       }).length
     };
   }

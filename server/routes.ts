@@ -107,7 +107,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       let items;
       if (search) {
-        items = await storage.searchInventoryItems(search as string);
+        items = await storage.searchInventoryItems({ name: search as string });
       } else if (storageAreaId) {
         items = await storage.getInventoryItemsByStorageArea(storageAreaId as string);
       } else if (categoryId) {
@@ -145,11 +145,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/inventory-items/search", async (req, res) => {
     try {
       const { barcode, sku, name } = req.query;
-      const items = await storage.searchInventoryItems({
-        barcode: barcode as string,
-        sku: sku as string, 
-        name: name as string,
-      });
+      const searchParams: any = {};
+      if (barcode) searchParams.barcode = barcode as string;
+      if (sku) searchParams.sku = sku as string;
+      if (name) searchParams.name = name as string;
+      
+      const items = await storage.searchInventoryItems(searchParams);
       res.json(items);
     } catch (error) {
       res.status(500).json({ message: "Failed to search inventory items" });

@@ -151,4 +151,8 @@ export type DashboardStats = {
   lowStockItems: number;
   pendingOrders: number;
   wellStocked: number;
+  totalCategories: number;
+  totalStorageAreas: number;
+  outOfStockItems: number;
+  recentlyUpdated: number;
 };
