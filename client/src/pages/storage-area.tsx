@@ -116,6 +116,45 @@ export default function StorageArea() {
     parseFloat(item.currentQuantity) <= parseFloat(item.minimumLevel)
   ).length;
 
+  const getStorageAreaHeaderStyle = (areaId: string) => {
+    switch (areaId) {
+      case "dry-storage":
+        return "storage-area-dry";
+      case "cold-storage":
+        return "storage-area-cold";
+      case "freezer":
+        return "storage-area-freezer";
+      default:
+        return "bg-card border border-border";
+    }
+  };
+
+  const getStorageAreaTextStyle = (areaId: string) => {
+    switch (areaId) {
+      case "dry-storage":
+        return "text-yellow-900 dark:text-yellow-100";
+      case "cold-storage":
+        return "text-blue-900 dark:text-blue-100";
+      case "freezer":
+        return "text-purple-900 dark:text-purple-100";
+      default:
+        return "text-foreground";
+    }
+  };
+
+  const getStorageAreaSubtextStyle = (areaId: string) => {
+    switch (areaId) {
+      case "dry-storage":
+        return "text-yellow-700 dark:text-yellow-300";
+      case "cold-storage":
+        return "text-blue-700 dark:text-blue-300";
+      case "freezer":
+        return "text-purple-700 dark:text-purple-300";
+      default:
+        return "text-muted-foreground";
+    }
+  };
+
   if (!storageArea) {
     return <div className="p-6">Loading...</div>;
   }
@@ -123,29 +162,31 @@ export default function StorageArea() {
   return (
     <div className="p-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900" data-testid="text-area-title">
-            {storageArea.name}
-          </h1>
-          <p className="text-gray-600 mt-1" data-testid="text-area-subtitle">
-            {items.length} items • {categories.length} categories • {totalLowStock} low stock alerts
-          </p>
-        </div>
-        <div className="flex space-x-3">
-          <Button variant="outline" data-testid="button-export">
-            <Download className="w-4 h-4 mr-2" />
-            Export
-          </Button>
-          <Button data-testid="button-add-category">
-            <Plus className="w-4 h-4 mr-2" />
-            Add Category
-          </Button>
+      <div className={`p-6 rounded-xl mb-6 ${getStorageAreaHeaderStyle(areaId!)}`}>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className={`text-2xl font-bold ${getStorageAreaTextStyle(areaId!)}`} data-testid="text-area-title">
+              {storageArea.name}
+            </h1>
+            <p className={`mt-1 ${getStorageAreaSubtextStyle(areaId!)}`} data-testid="text-area-subtitle">
+              {items.length} items • {categories.length} categories • {totalLowStock} low stock alerts
+            </p>
+          </div>
+          <div className="flex space-x-3">
+            <Button variant="outline" className="zawadi-animate-button" data-testid="button-export">
+              <Download className="w-4 h-4 mr-2" />
+              Export
+            </Button>
+            <Button className="zawadi-button-primary zawadi-animate-button" data-testid="button-add-category">
+              <Plus className="w-4 h-4 mr-2" />
+              Add Category
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Filter and Sort Controls */}
-      <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
+      <div className="zawadi-card p-4 mb-6">
         <div className="flex flex-wrap items-center gap-4">
           <Select value={categoryFilter} onValueChange={setCategoryFilter}>
             <SelectTrigger className="w-[180px]" data-testid="select-category-filter">
@@ -188,6 +229,7 @@ export default function StorageArea() {
             <Button 
               variant={viewMode === "category" ? "default" : "ghost"} 
               size="sm" 
+              className={`zawadi-animate-button ${viewMode === "category" ? "zawadi-button-primary" : ""}`}
               onClick={() => setViewMode("category")}
               data-testid="button-category-view"
             >
@@ -197,6 +239,7 @@ export default function StorageArea() {
             <Button 
               variant={viewMode === "list" ? "default" : "ghost"} 
               size="sm" 
+              className={`zawadi-animate-button ${viewMode === "list" ? "zawadi-button-primary" : ""}`}
               onClick={() => setViewMode("list")}
               data-testid="button-list-view"
             >

@@ -3,67 +3,87 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(0, 0%, 98%);
-  --foreground: hsl(215, 25%, 27%);
-  --muted: hsl(210, 25%, 93%);
-  --muted-foreground: hsl(215, 15%, 55%);
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(228, 20%, 20%);
+  --muted: hsl(227, 10%, 95%);
+  --muted-foreground: hsl(227, 8%, 45%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(215, 25%, 27%);
+  --popover-foreground: hsl(228, 20%, 20%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(215, 25%, 27%);
-  --border: hsl(210, 20%, 88%);
-  --input: hsl(210, 20%, 92%);
-  --primary: hsl(218, 80%, 56%);
+  --card-foreground: hsl(228, 20%, 20%);
+  --border: hsl(227, 15%, 90%);
+  --input: hsl(227, 15%, 94%);
+  --primary: hsl(225, 62%, 55%);
   --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsl(210, 25%, 93%);
-  --secondary-foreground: hsl(215, 25%, 27%);
-  --accent: hsl(210, 40%, 96%);
-  --accent-foreground: hsl(215, 25%, 27%);
+  --secondary: hsl(227, 10%, 95%);
+  --secondary-foreground: hsl(228, 20%, 20%);
+  --accent: hsl(217, 73%, 90%);
+  --accent-foreground: hsl(225, 62%, 55%);
   --destructive: hsl(0, 72%, 51%);
   --destructive-foreground: hsl(0, 0%, 100%);
-  --ring: hsl(218, 80%, 56%);
+  --ring: hsl(225, 62%, 55%);
   --radius: 0.75rem;
   --success: hsl(142, 76%, 36%);
   --success-foreground: hsl(0, 0%, 100%);
-  --warning: hsl(35, 91%, 55%);
-  --warning-foreground: hsl(0, 0%, 100%);
-  --info: hsl(199, 89%, 48%);
+  --warning: hsl(38, 92%, 50%);
+  --warning-foreground: hsl(228, 20%, 20%);
+  --info: hsl(217, 76%, 58%);
   --info-foreground: hsl(0, 0%, 100%);
-  --dry-storage: hsl(45, 85%, 60%);
-  --cold-storage: hsl(200, 85%, 60%);
+  
+  /* Zawadi Brand Colors */
+  --zawadi-blue: hsl(217, 76%, 58%);
+  --zawadi-deep-blue: hsl(225, 62%, 55%);
+  --zawadi-charcoal: hsl(228, 20%, 20%);
+  --zawadi-dark-slate: hsl(217, 32%, 25%);
+  --zawadi-soft-gray: hsl(227, 8%, 45%);
+  --zawadi-yellow: hsl(38, 92%, 50%);
+  
+  /* Storage Area Colors */
+  --dry-storage: hsl(38, 92%, 50%);
+  --cold-storage: hsl(217, 76%, 58%);
   --freezer: hsl(260, 85%, 60%);
 }
 
 .dark {
-  --background: hsl(215, 28%, 9%);
+  --background: hsl(228, 20%, 8%);
   --foreground: hsl(0, 0%, 95%);
-  --muted: hsl(215, 20%, 15%);
-  --muted-foreground: hsl(215, 10%, 65%);
-  --popover: hsl(215, 28%, 12%);
+  --muted: hsl(228, 15%, 15%);
+  --muted-foreground: hsl(227, 8%, 65%);
+  --popover: hsl(228, 20%, 12%);
   --popover-foreground: hsl(0, 0%, 95%);
-  --card: hsl(215, 28%, 12%);
+  --card: hsl(228, 20%, 12%);
   --card-foreground: hsl(0, 0%, 95%);
-  --border: hsl(215, 20%, 18%);
-  --input: hsl(215, 20%, 18%);
-  --primary: hsl(218, 80%, 56%);
+  --border: hsl(228, 15%, 18%);
+  --input: hsl(228, 15%, 18%);
+  --primary: hsl(217, 76%, 58%);
   --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsl(215, 20%, 15%);
+  --secondary: hsl(228, 15%, 15%);
   --secondary-foreground: hsl(0, 0%, 95%);
-  --accent: hsl(215, 20%, 15%);
-  --accent-foreground: hsl(0, 0%, 95%);
+  --accent: hsl(217, 32%, 20%);
+  --accent-foreground: hsl(217, 76%, 80%);
   --destructive: hsl(0, 72%, 51%);
   --destructive-foreground: hsl(0, 0%, 100%);
-  --ring: hsl(218, 80%, 56%);
+  --ring: hsl(217, 76%, 58%);
   --radius: 0.75rem;
   --success: hsl(142, 76%, 36%);
   --success-foreground: hsl(0, 0%, 100%);
-  --warning: hsl(35, 91%, 55%);
-  --warning-foreground: hsl(0, 0%, 100%);
-  --info: hsl(199, 89%, 48%);
+  --warning: hsl(38, 92%, 50%);
+  --warning-foreground: hsl(228, 20%, 20%);
+  --info: hsl(217, 76%, 58%);
   --info-foreground: hsl(0, 0%, 100%);
-  --dry-storage: hsl(45, 85%, 60%);
-  --cold-storage: hsl(200, 85%, 60%);
-  --freezer: hsl(260, 85%, 60%);
+  
+  /* Zawadi Brand Colors - Dark Mode */
+  --zawadi-blue: hsl(217, 76%, 65%);
+  --zawadi-deep-blue: hsl(225, 62%, 60%);
+  --zawadi-charcoal: hsl(228, 20%, 15%);
+  --zawadi-dark-slate: hsl(217, 32%, 20%);
+  --zawadi-soft-gray: hsl(227, 8%, 65%);
+  --zawadi-yellow: hsl(38, 92%, 55%);
+  
+  /* Storage Area Colors - Dark Mode */
+  --dry-storage: hsl(38, 92%, 55%);
+  --cold-storage: hsl(217, 76%, 65%);
+  --freezer: hsl(260, 85%, 70%);
 }
 
 @layer base {
@@ -76,39 +96,85 @@
   }
 }
 
-/* Custom storage area color coding */
+/* Zawadi Brand Styling */
+.zawadi-header {
+  background: linear-gradient(135deg, hsl(var(--zawadi-deep-blue)), hsl(var(--zawadi-blue)));
+  @apply text-white shadow-lg;
+}
+
+.zawadi-sidebar {
+  background: linear-gradient(180deg, hsl(var(--zawadi-charcoal)), hsl(var(--zawadi-dark-slate)));
+  @apply text-white shadow-xl;
+}
+
+.zawadi-card {
+  @apply bg-white dark:bg-card shadow-lg hover:shadow-xl transition-all duration-300 border border-border rounded-xl;
+}
+
+.zawadi-button-primary {
+  background: linear-gradient(135deg, hsl(var(--zawadi-blue)), hsl(var(--zawadi-deep-blue)));
+  @apply text-white hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg;
+}
+
+.zawadi-button-secondary {
+  background: linear-gradient(135deg, hsl(var(--zawadi-yellow)), hsl(38, 92%, 45%));
+  @apply text-slate-800 hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg;
+}
+
+/* Enhanced Storage Area Styling */
 .storage-area-dry {
-  @apply border-l-4 border-l-yellow-500 bg-yellow-50 dark:bg-yellow-950/20;
+  background: linear-gradient(135deg, hsl(38, 92%, 95%), hsl(38, 92%, 90%));
+  @apply border-l-4 border-l-yellow-500 dark:bg-gradient-to-r dark:from-yellow-950/20 dark:to-yellow-900/10;
 }
 
 .storage-area-cold {
-  @apply border-l-4 border-l-blue-500 bg-blue-50 dark:bg-blue-950/20;
+  background: linear-gradient(135deg, hsl(217, 76%, 95%), hsl(217, 76%, 90%));
+  @apply border-l-4 border-l-blue-500 dark:bg-gradient-to-r dark:from-blue-950/20 dark:to-blue-900/10;
 }
 
 .storage-area-freezer {
-  @apply border-l-4 border-l-purple-500 bg-purple-50 dark:bg-purple-950/20;
+  background: linear-gradient(135deg, hsl(260, 85%, 95%), hsl(260, 85%, 90%));
+  @apply border-l-4 border-l-purple-500 dark:bg-gradient-to-r dark:from-purple-950/20 dark:to-purple-900/10;
 }
 
 .category-badge-dry {
-  @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300;
+  background: hsl(var(--zawadi-yellow));
+  @apply text-slate-800 font-medium px-3 py-1 rounded-full shadow-sm;
 }
 
 .category-badge-cold {
-  @apply bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300;
+  background: hsl(var(--zawadi-blue));
+  @apply text-white font-medium px-3 py-1 rounded-full shadow-sm;
 }
 
 .category-badge-freezer {
-  @apply bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300;
+  @apply bg-purple-500 text-white font-medium px-3 py-1 rounded-full shadow-sm;
 }
 
+/* Enhanced Inventory Row Styling */
 .inventory-row-low-stock {
-  @apply bg-red-50 dark:bg-red-950/20 border-l-4 border-l-red-500;
+  @apply bg-gradient-to-r from-red-50 to-red-100 dark:from-red-950/20 dark:to-red-900/10 border-l-4 border-l-red-500 shadow-sm;
 }
 
 .inventory-row-out-of-stock {
-  @apply bg-red-100 dark:bg-red-950/40 border-l-4 border-l-red-600;
+  @apply bg-gradient-to-r from-red-100 to-red-200 dark:from-red-950/40 dark:to-red-900/20 border-l-4 border-l-red-600 shadow-md;
 }
 
 .inventory-row-good-stock {
-  @apply bg-green-50 dark:bg-green-950/20 border-l-4 border-l-green-500;
+  @apply bg-gradient-to-r from-green-50 to-green-100 dark:from-green-950/20 dark:to-green-900/10 border-l-4 border-l-green-500 shadow-sm;
+}
+
+/* Card Hover Effects */
+.zawadi-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Button Animations */
+.zawadi-animate-button {
+  @apply transition-all duration-200 hover:scale-105 active:scale-95;
+}
+
+/* Sticky Header */
+.zawadi-sticky-header {
+  @apply sticky top-0 z-50 backdrop-blur-sm;
 }

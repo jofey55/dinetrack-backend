@@ -41,13 +41,13 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const getStorageAreaStyle = (areaId: string) => {
     switch (areaId) {
       case "dry-storage":
-        return "text-yellow-700 dark:text-yellow-300";
+        return "text-yellow-300 hover:text-yellow-200";
       case "cold-storage":
-        return "text-blue-700 dark:text-blue-300";
+        return "text-blue-300 hover:text-blue-200";
       case "freezer":
-        return "text-purple-700 dark:text-purple-300";
+        return "text-purple-300 hover:text-purple-200";
       default:
-        return "";
+        return "text-white";
     }
   };
 
@@ -91,24 +91,24 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed inset-y-0 left-0 z-50 w-64 bg-card dark:bg-card shadow-lg transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
+          "fixed inset-y-0 left-0 z-50 w-64 zawadi-sidebar transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
           isOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-border">
+          <div className="flex items-center justify-between p-6 border-b border-white/20">
             <div className="flex items-center space-x-3">
-              <ZawadiLogo className="h-8 w-8" />
+              <ZawadiLogo className="h-8 w-8 text-white" />
               <div>
-                <h1 className="text-xl font-bold text-card-foreground">Zawadi Tracker</h1>
-                <p className="text-sm text-muted-foreground">Inventory Management</p>
+                <h1 className="text-xl font-bold text-white">Zawadi Tracker</h1>
+                <p className="text-sm text-blue-200">Inventory Management</p>
               </div>
             </div>
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden"
+              className="lg:hidden text-white hover:bg-white/20"
               onClick={onClose}
               data-testid="button-close-sidebar"
             >
@@ -128,10 +128,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               return (
                 <Link key={link.href} href={link.href}>
                   <Button
-                    variant={isActive ? "secondary" : "ghost"}
+                    variant="ghost"
                     className={cn(
-                      "w-full justify-start relative",
-                      isActive && "bg-accent text-accent-foreground",
+                      "w-full justify-start relative text-white hover:bg-white/20 zawadi-animate-button",
+                      isActive && "bg-white/20 text-white",
                       isStorageArea && getStorageAreaStyle(areaId)
                     )}
                     onClick={() => onClose()}

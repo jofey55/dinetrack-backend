@@ -7,7 +7,7 @@ This is a professional restaurant inventory management system designed for Zawad
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
-Design preferences: Color-coded interface with professional branding, enhanced visual appeal with gradients and storage area specific color themes.
+Design preferences: Zawadi Center branded interface with specific brand colors (#3b85db blue, #3349c0 deep blue, #2b2a35 charcoal, #ffb30b yellow), color-coded storage areas, modern gradients, enhanced visual appeal with professional styling and animated interactions.
 
 ## System Architecture
 
@@ -55,11 +55,13 @@ Design preferences: Color-coded interface with professional branding, enhanced v
 
 ### Frontend Components
 - **Layout System**: Responsive sidebar navigation with mobile support and Zawadi branding
-- **Dashboard**: Color-coded statistics overview with gradient cards and visual indicators
-- **Storage Area Views**: Color-themed inventory management per storage location (yellow=dry, blue=cold, purple=freezer)
+- **Header**: Zawadi-themed header with gradient background, professional logo, and sticky positioning
+- **Sidebar**: Dark gradient sidebar with Zawadi colors and animated navigation buttons
+- **Dashboard**: Color-coded statistics cards with gradients, hover effects, and Zawadi brand colors
+- **Storage Area Views**: Color-themed inventory management per storage location (yellow=dry, blue=cold, purple=freezer) with enhanced headers
 - **Inventory Tables**: Interactive tables with color-coded stock status indicators
-- **Modals/Forms**: Add new items, categories, and storage areas
-- **Branding**: Custom Zawadi logo component and professional color scheme
+- **Modals/Forms**: Add new items, categories, and storage areas with Zawadi styling
+- **Branding**: Custom Zawadi logo component, authentic brand color palette, and professional animations
 
 ## Data Flow
 

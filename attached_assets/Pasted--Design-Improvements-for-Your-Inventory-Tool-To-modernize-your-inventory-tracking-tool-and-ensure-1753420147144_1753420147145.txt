@@ -1,0 +1,63 @@
+## Design Improvements for Your Inventory Tool
+
+To modernize your inventory tracking tool and ensure visual alignment with Zawadi Center, here’s a guide on color usage, layout, and branding:
+
+### 1. **Brand Colors & Visual Theme**
+
+- **Primary Colors (From Zawadi Center):**
+  - Blue: `#3b85db` (vibrant accent)
+  - Deep Blue: `#3349c0`
+  - Charcoal: `#2b2a35` (main background/headers)
+  - Dark Slate: `#1f2b3f`
+  - Soft Gray: `#626272`
+  - Bright Yellow: `#ffb30b` (secondary highlight)
+  - White: `#ffffff` (background, sections)
+
+- **Usage Suggestion:**
+  - Use deep blue (`#3349c0`) for major headers and navigation backgrounds.
+  - Accent buttons and highlights with blue (`#3b85db`) and yellow (`#ffb30b`) for vibrancy.
+  - Apply white or soft gray for content areas to keep things readable and spacious[1].
+
+### 2. **Logo Placement**
+
+- Place the Zawadi Center logo (SVG: `/assets/images/softr_logo/softr_logo_icon_only.svg`) at the top left of the site’s header, matching the original site.
+- Use a clean header bar with a deep blue or charcoal background for strong contrast[1].
+
+### 3. **Modern Layout & Organization**
+
+- **Sidebar Navigation:**  
+  Collapse and expand sections/subsections in a left-side panel with high contrast headers and clear icons.
+- **Cards or Rows for Items:**  
+  Each inventory item appears as a card or row with:
+  - Name, quantity, minimum threshold
+  - Inline “Order Now” button (colored in blue/yellow), and quantity input
+- **Colorful Indicators:**  
+  Use colored badges or icons to flag low stock (e.g., yellow circles for needs ordering)
+- **Subsections:**  
+  Indent or nest with lighter blues or drop-shadowed cards—allows easy visual tracking of nested groups while keeping it tidy.
+
+### 4. **Enhanced Visual Features**
+
+- **Consistent Font & Spacing:**  
+  Use a modern, sans-serif font and generous spacing/padding for clarity.
+- **Sticky Header:**  
+  Keep header navigation and logo visible on scroll.
+- **Card Effects:**  
+  Add subtle shadows/hover effects on cards and buttons to give a lively, tactile feel.
+- **Animated Buttons:**  
+  “Order Now” buttons animate slightly on hover/click for feedback and engagement.
+- **Warm Highlighting:**  
+  Use bright yellow for important actions (like order notifications) to catch the user’s eye without overwhelming the interface.
+
+### 5. **Result: Clean, Branded, Colorful UI**
+
+Your redesigned tool will combine function and a modern, colorful experience by:
+
+- Featuring Zawadi Center’s logo and core colors for instant brand recognition.
+- Utilizing a deep blue/charcoal palette with bright accent colors for navigation and alerts.
+- Organizing sections with clear, collapsible nesting for a tidy yet detailed overview.
+- Highlighting important actions (ordering, low stock) with colorful, easy-to-spot cues.
+
+By following these guidelines, your inventory tool will not only “look better” and more modern but will also integrate seamlessly with Zawadi Center’s established visual identity[1].
+
+[1] https://www.zawadicenter.com

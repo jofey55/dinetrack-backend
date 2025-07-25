@@ -15,7 +15,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
 
   return (
     <>
-      <header className="bg-white dark:bg-card shadow-sm border-b border-border px-6 py-4">
+      <header className="zawadi-header zawadi-sticky-header px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <Button
@@ -28,20 +28,20 @@ export default function Header({ onMenuClick }: HeaderProps) {
               <Menu className="w-5 h-5" />
             </Button>
             <div className="hidden lg:flex items-center space-x-3">
-              <ZawadiLogo className="h-8 w-8" />
+              <ZawadiLogo className="h-8 w-8 text-white" />
               <div>
-                <h1 className="text-lg font-semibold text-foreground">Zawadi Inventory Tracker</h1>
-                <p className="text-sm text-muted-foreground">Professional Restaurant Management</p>
+                <h1 className="text-lg font-semibold text-white">Zawadi Inventory Tracker</h1>
+                <p className="text-sm text-blue-100">Professional Restaurant Management</p>
               </div>
             </div>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
               <Input
                 type="text"
                 placeholder="Search inventory items..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 w-64 lg:w-80"
+                className="pl-10 w-64 lg:w-80 bg-white/90 border-white/20 placeholder:text-slate-400"
                 data-testid="input-search"
               />
             </div>
@@ -49,13 +49,13 @@ export default function Header({ onMenuClick }: HeaderProps) {
           <div className="flex items-center space-x-3">
             <Button
               onClick={() => setShowAddModal(true)}
-              className="bg-primary hover:bg-primary/90"
+              className="zawadi-button-secondary zawadi-animate-button"
               data-testid="button-add-item"
             >
               <Plus className="w-4 h-4 mr-2" />
               Add Item
             </Button>
-            <Button variant="ghost" size="icon" data-testid="button-notifications">
+            <Button variant="ghost" size="icon" className="text-white hover:bg-white/20" data-testid="button-notifications">
               <Bell className="w-5 h-5" />
             </Button>
           </div>
