@@ -1,0 +1,56 @@
+Great—thanks for the clarification.
+
+Let’s update your **test sheet** to reflect that:
+
+* ✅ **Measurement units** (like `lbs`, `pcs`, `gallons`, etc.) **should be tested** during the add/update process.
+* ❓ **Price** may not be currently supported. We’ll make price optional in the test plan, and note it as "skip if unsupported."
+
+---
+
+## ✅ Updated Key Fields to Track per Item
+
+When adding or updating an item, test that the following are correctly handled:
+
+| Field               | Example                    | Required? | Notes                                |
+| ------------------- | -------------------------- | --------- | ------------------------------------ |
+| Item Name           | `Tomatoes`                 | ✅         | Must be unique or update existing    |
+| Quantity            | `12`                       | ✅         | Integer or float allowed             |
+| Unit of Measurement | `lbs`, `pcs`, `bags`, etc. | ✅         | Should be stored with quantity       |
+| Price per Unit      | `$1.25`                    | Optional  | Include only if your app supports it |
+
+---
+
+## 🧪 Updated Sample Test Inputs
+
+| # | Scenario                                    | Input Example                                 | Expected Behavior                      |
+| - | ------------------------------------------- | --------------------------------------------- | -------------------------------------- |
+| 1 | Add item with measurement                   | `Item: Sugar, Qty: 5, Unit: lbs`              | Stored as “5 lbs of Sugar”             |
+| 2 | Add item with custom unit                   | `Item: Juice, Qty: 2, Unit: gallons`          | Stored correctly                       |
+| 3 | Add item without unit                       | `Item: Eggs, Qty: 12`                         | Error if unit is required              |
+| 4 | Add item with unit and price (if supported) | `Item: Rice, Qty: 10, Unit: lbs, Price: 1.20` | Stored as “10 lbs of Rice @ \$1.20/lb” |
+| 5 | Add item with special unit                  | `Item: Flour, Qty: 25, Unit: kg`              | Stored properly                        |
+
+---
+
+## ❗ Suggested App Improvements
+
+Based on your comments, here are a few **feature checks or enhancements** to consider:
+
+### 🔧 Feature Suggestions
+
+| Feature                        | Description                                                                      |
+| ------------------------------ | -------------------------------------------------------------------------------- |
+| ✅ **Require measurement unit** | Make "unit" required to avoid confusion                                          |
+| ✅ **Support price** (optional) | If not implemented, consider adding to support value tracking                    |
+| ✅ **Validation checks**        | Prevent invalid units (e.g., "unit: xyz123") unless you allow free-form units    |
+| ✅ **Default units**            | Optionally auto-fill common units (e.g., pcs for items like eggs, bags for rice) |
+
+---
+
+Would you like me to help:
+
+* Review your code to confirm if **price is supported**?
+* Add **unit support** or improve how it's handled?
+* Generate a Python unit test file to test these scenarios automatically?
+
+Just send your app code or confirm the structure, and I’ll help build it out.

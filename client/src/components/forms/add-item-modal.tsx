@@ -28,6 +28,7 @@ export default function AddItemModal({
   const [currentQuantity, setCurrentQuantity] = useState("");
   const [minimumLevel, setMinimumLevel] = useState("");
   const [unit, setUnit] = useState("");
+  const [pricePerUnit, setPricePerUnit] = useState("");
   const [supplier, setSupplier] = useState("");
   const [storageAreaId, setStorageAreaId] = useState(selectedStorageAreaId || "");
   const [categoryId, setCategoryId] = useState(selectedCategoryId || "");
@@ -71,6 +72,7 @@ export default function AddItemModal({
     setCurrentQuantity("");
     setMinimumLevel("");
     setUnit("");
+    setPricePerUnit("");
     setSupplier("");
     setStorageAreaId(selectedStorageAreaId || "");
     setCategoryId(selectedCategoryId || "");
@@ -95,6 +97,7 @@ export default function AddItemModal({
       currentQuantity: currentQuantity.toString(),
       minimumLevel: minimumLevel.toString(),
       unit: unit.trim(),
+      pricePerUnit: pricePerUnit ? parseFloat(pricePerUnit).toString() : null,
       supplier: supplier.trim() || null,
     });
   };
@@ -209,25 +212,55 @@ export default function AddItemModal({
 
             <div className="space-y-2">
               <Label htmlFor="unit">Unit *</Label>
-              <Input
-                id="unit"
-                value={unit}
-                onChange={(e) => setUnit(e.target.value)}
-                placeholder="kg, pcs, etc."
-                data-testid="input-unit"
-              />
+              <Select value={unit} onValueChange={setUnit}>
+                <SelectTrigger data-testid="select-unit">
+                  <SelectValue placeholder="Select unit" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="lbs">lbs (pounds)</SelectItem>
+                  <SelectItem value="kg">kg (kilograms)</SelectItem>
+                  <SelectItem value="pcs">pcs (pieces)</SelectItem>
+                  <SelectItem value="bags">bags</SelectItem>
+                  <SelectItem value="gallons">gallons</SelectItem>
+                  <SelectItem value="liters">liters</SelectItem>
+                  <SelectItem value="cans">cans</SelectItem>
+                  <SelectItem value="boxes">boxes</SelectItem>
+                  <SelectItem value="packs">packs</SelectItem>
+                  <SelectItem value="bottles">bottles</SelectItem>
+                  <SelectItem value="dozen">dozen</SelectItem>
+                  <SelectItem value="cases">cases</SelectItem>
+                  <SelectItem value="oz">oz (ounces)</SelectItem>
+                  <SelectItem value="grams">grams</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="supplier">Supplier</Label>
-            <Input
-              id="supplier"
-              value={supplier}
-              onChange={(e) => setSupplier(e.target.value)}
-              placeholder="Enter supplier name (optional)"
-              data-testid="input-supplier"
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="price">Price per Unit (optional)</Label>
+              <Input
+                id="price"
+                type="number"
+                step="0.01"
+                min="0"
+                value={pricePerUnit}
+                onChange={(e) => setPricePerUnit(e.target.value)}
+                placeholder="0.00"
+                data-testid="input-price-per-unit"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="supplier">Supplier</Label>
+              <Input
+                id="supplier"
+                value={supplier}
+                onChange={(e) => setSupplier(e.target.value)}
+                placeholder="Enter supplier name (optional)"
+                data-testid="input-supplier"
+              />
+            </div>
           </div>
 
           <DialogFooter>

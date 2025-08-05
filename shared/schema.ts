@@ -36,6 +36,7 @@ export const inventoryItems = pgTable("inventory_items", {
   currentQuantity: decimal("current_quantity").notNull().default("0"),
   minimumLevel: decimal("minimum_level").notNull().default("0"),
   unit: text("unit").notNull(),
+  pricePerUnit: decimal("price_per_unit", { precision: 10, scale: 2 }),
   supplier: text("supplier"),
   lastUpdated: timestamp("last_updated").defaultNow(),
 });
