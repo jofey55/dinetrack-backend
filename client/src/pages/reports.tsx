@@ -230,7 +230,7 @@ export default function Reports() {
                 <div>
                   <h3 className="font-medium" data-testid={`text-area-${area.id}`}>{area.name}</h3>
                   <p className="text-sm text-gray-600">
-                    {area.itemCount} items • {area.lowStockCount} low stock
+                    {area.totalItems} items • {area.lowStockCount} low stock
                   </p>
                 </div>
                 <div className="text-right">

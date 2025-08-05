@@ -56,7 +56,7 @@ export default function Dashboard() {
       bgColor: "bg-white",
       textColor: "text-gray-900",
       iconBgColor: "bg-blue-100",
-      href: "/storage-area/dry-storage", // Navigate to main inventory view
+      href: "/storage/dry-storage", // Navigate to main inventory view
       clickable: true,
     },
     {
@@ -86,7 +86,7 @@ export default function Dashboard() {
       bgColor: "bg-white",
       textColor: "text-green-600", 
       iconBgColor: "bg-green-100",
-      href: "/storage-area/dry-storage", // Navigate to inventory view filtered for well-stocked
+      href: "/storage/dry-storage", // Navigate to inventory view filtered for well-stocked
       clickable: true,
     },
   ];
