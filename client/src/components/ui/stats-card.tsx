@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { LucideIcon } from "lucide-react";
+import { Link } from "wouter";
 
 interface StatsCardProps {
   title: string;
@@ -8,6 +9,8 @@ interface StatsCardProps {
   bgColor: string;
   textColor: string;
   iconBgColor: string;
+  href?: string;
+  clickable?: boolean;
 }
 
 export default function StatsCard({
@@ -17,6 +20,8 @@ export default function StatsCard({
   bgColor,
   textColor,
   iconBgColor,
+  href,
+  clickable = false,
 }: StatsCardProps) {
   const getCardStyle = (title: string) => {
     switch (title) {
@@ -48,23 +53,37 @@ export default function StatsCard({
     }
   };
 
+  const cardContent = (
+    <CardContent className="p-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm font-medium text-muted-foreground" data-testid={`text-stats-title-${title.toLowerCase().replace(/\s+/g, '-')}`}>
+            {title}
+          </p>
+          <p className={`text-3xl font-bold ${getValueColor(title)}`} data-testid={`text-stats-value-${title.toLowerCase().replace(/\s+/g, '-')}`}>
+            {value}
+          </p>
+        </div>
+        <div className={`${iconBgColor} p-3 rounded-full`}>
+          <Icon className={`w-6 h-6 ${getValueColor(title)}`} />
+        </div>
+      </div>
+    </CardContent>
+  );
+
+  if (clickable && href) {
+    return (
+      <Link href={href}>
+        <Card className={`${getCardStyle(title)} cursor-pointer hover:scale-105 transform transition-all duration-200 hover:shadow-lg`} data-testid={`card-stats-${title.toLowerCase().replace(/\s+/g, '-')}`}>
+          {cardContent}
+        </Card>
+      </Link>
+    );
+  }
+
   return (
     <Card className={getCardStyle(title)} data-testid={`card-stats-${title.toLowerCase().replace(/\s+/g, '-')}`}>
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-muted-foreground" data-testid={`text-stats-title-${title.toLowerCase().replace(/\s+/g, '-')}`}>
-              {title}
-            </p>
-            <p className={`text-3xl font-bold ${getValueColor(title)}`} data-testid={`text-stats-value-${title.toLowerCase().replace(/\s+/g, '-')}`}>
-              {value}
-            </p>
-          </div>
-          <div className={`${iconBgColor} p-3 rounded-full`}>
-            <Icon className={`w-6 h-6 ${getValueColor(title)}`} />
-          </div>
-        </div>
-      </CardContent>
+      {cardContent}
     </Card>
   );
 }

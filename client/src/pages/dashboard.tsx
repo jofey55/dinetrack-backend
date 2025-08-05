@@ -56,6 +56,8 @@ export default function Dashboard() {
       bgColor: "bg-white",
       textColor: "text-gray-900",
       iconBgColor: "bg-blue-100",
+      href: "/storage-area/dry-storage", // Navigate to main inventory view
+      clickable: true,
     },
     {
       title: "Low Stock Items", 
@@ -64,6 +66,8 @@ export default function Dashboard() {
       bgColor: "bg-white",
       textColor: "text-red-600",
       iconBgColor: "bg-red-100",
+      href: "/order-now", // Navigate to order page
+      clickable: true,
     },
     {
       title: "Pending Orders",
@@ -72,6 +76,8 @@ export default function Dashboard() {
       bgColor: "bg-white", 
       textColor: "text-yellow-600",
       iconBgColor: "bg-yellow-100",
+      href: "/order-now", // Navigate to order page
+      clickable: true,
     },
     {
       title: "Well Stocked",
@@ -80,6 +86,8 @@ export default function Dashboard() {
       bgColor: "bg-white",
       textColor: "text-green-600", 
       iconBgColor: "bg-green-100",
+      href: "/storage-area/dry-storage", // Navigate to inventory view filtered for well-stocked
+      clickable: true,
     },
   ];
 
