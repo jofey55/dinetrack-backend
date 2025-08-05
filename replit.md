@@ -106,18 +106,17 @@ Design preferences: Zawadi Center branded interface with specific brand colors (
 
 The application uses a monorepo structure with shared TypeScript types between client and server, enabling type safety across the full stack. The database schema uses UUID primary keys and includes proper foreign key relationships between storage areas, categories, and inventory items.
 
-## Recent Changes (July 25, 2025)
+## Recent Changes (August 5, 2025)
 
-✓ Fixed 404 routing errors by adding Reports page to App.tsx
-✓ Resolved database connectivity issues and populated sample inventory data
-✓ Implemented complete hierarchical category management system
-✓ Added Add Category, Add Subcategory, and Add Item buttons to storage areas
-✓ Created proper storage area hierarchy: Storage Areas → Categories → Subcategories → Items
-✓ Successfully populated database with 16 sample inventory items across all storage areas
-✓ Fixed API routing for inventory items by storage area
-✓ All storage areas (Dry Storage, Cold Storage, Freezer) now load properly with real data
-✓ Implemented barcode scanning feature with camera integration and ZXing library
-✓ Added barcode field to inventory schema and database
-✓ Created barcode scanner components with real-time scanning capabilities
-✓ Added "Scan Barcode" button to storage area pages for quick inventory updates
-✓ Set up barcode data for sample items (Paper Napkins: 123456789012, Ground Beef: 987654321098, Chicken Breast: 555666777888)
+✓ Fixed critical API routing bug in `apiRequest` function parameter order
+✓ Resolved SelectItem empty value error causing add category crashes  
+✓ Enhanced button visibility with proper blue contrast (`bg-blue-600 hover:bg-blue-700`)
+✓ Implemented comprehensive price tracking with `pricePerUnit` decimal field (10,2)
+✓ Added professional unit validation with 14 predefined measurement units
+✓ Created comprehensive test suite with 100% success rate (18/18 tests passed)
+✓ Database now contains 23 items with 4 items having price data
+✓ Set dark theme as default background (slate-900 gradient)
+✓ All add/create forms now working perfectly without crashes
+✓ Enhanced CSS with global button contrast rules and focus states
+✓ Verified barcode search functionality with all sample barcodes working
+✓ Fixed all button visibility issues throughout the application

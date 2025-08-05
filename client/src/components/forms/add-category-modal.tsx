@@ -99,7 +99,7 @@ export default function AddCategoryModal({
       description: description.trim() || null,
       color,
       storageAreaId,
-      parentCategoryId: selectedParentId || null,
+      parentCategoryId: selectedParentId === "none" ? null : selectedParentId || null,
     });
   };
 
@@ -166,7 +166,7 @@ export default function AddCategoryModal({
                   <SelectValue placeholder="Select parent category (optional)" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">None (Main Category)</SelectItem>
+                  <SelectItem value="none">None (Main Category)</SelectItem>
                   {parentCategories.map((category) => (
                     <SelectItem key={category.id} value={category.id}>
                       {category.name}
