@@ -113,7 +113,20 @@
 
 .zawadi-button-primary {
   background: linear-gradient(135deg, hsl(var(--zawadi-blue)), hsl(var(--zawadi-deep-blue)));
-  @apply text-white hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg;
+  @apply text-white hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg border-0;
+}
+
+/* Ensure all buttons have proper contrast */
+button {
+  @apply outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+}
+
+.btn-primary {
+  @apply bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md transition-colors border-0;
+}
+
+.btn-secondary {
+  @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium px-4 py-2 rounded-md transition-colors border border-gray-300;
 }
 
 .zawadi-button-secondary {

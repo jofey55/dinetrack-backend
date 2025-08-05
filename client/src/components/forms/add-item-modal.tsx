@@ -275,7 +275,7 @@ export default function AddItemModal({
             <Button
               type="submit"
               disabled={createItemMutation.isPending}
-              className="zawadi-button-primary"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md transition-colors"
               data-testid="button-create-item"
             >
               {createItemMutation.isPending ? (

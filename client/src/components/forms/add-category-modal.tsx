@@ -210,7 +210,7 @@ export default function AddCategoryModal({
             <Button
               type="submit"
               disabled={createCategoryMutation.isPending}
-              className="zawadi-button-primary"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md transition-colors"
               data-testid="button-create-category"
             >
               {createCategoryMutation.isPending ? (
