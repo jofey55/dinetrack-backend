@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RestaurantTracker - Inventory Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563EB',
+                        success: '#10B981',
+                        warning: '#F59E0B',
+                        danger: '#EF4444'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 font-inter">
+    <!-- @COMPONENT: AppShell [main layout wrapper] -->
+    <div class="min-h-screen flex">
+        <!-- @COMPONENT: Sidebar [navigation between storage areas] -->
+        <div class="bg-white shadow-lg w-64 fixed h-full lg:relative lg:flex flex-col z-30" id="sidebar">
+            <div class="p-6 border-b border-gray-200">
+                <h1 class="text-xl font-bold text-gray-900">RestaurantTracker</h1>
+                <p class="text-sm text-gray-500 mt-1">Inventory Management</p>
+            </div>
+            
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="#" class="flex items-center px-4 py-3 text-primary bg-blue-50 rounded-lg font-medium" data-area="overview">
+                    <i class="fas fa-chart-bar mr-3"></i>
+                    Overview
+                </a>
+                <a href="#" class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg" data-area="dry-storage">
+                    <i class="fas fa-box mr-3"></i>
+                    Dry Storage
+                    <span class="ml-auto bg-danger text-white text-xs px-2 py-1 rounded-full" data-mock="true">3</span>
+                </a>
+                <a href="#" class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg" data-area="cold-storage">
+                    <i class="fas fa-snowflake mr-3"></i>
+                    Cold Storage
+                    <span class="ml-auto bg-warning text-white text-xs px-2 py-1 rounded-full" data-mock="true">5</span>
+                </a>
+                <a href="#" class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg" data-area="freezer">
+                    <i class="fas fa-temperature-low mr-3"></i>
+                    Freezer
+                    <span class="ml-auto bg-success text-white text-xs px-2 py-1 rounded-full" data-mock="true">0</span>
+                </a>
+                <div class="border-t border-gray-200 pt-4 mt-4">
+                    <a href="#" class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg" data-area="order-now">
+                        <i class="fas fa-shopping-cart mr-3"></i>
+                        Order Now
+                        <span class="ml-auto bg-danger text-white text-xs px-2 py-1 rounded-full" data-mock="true">8</span>
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg" data-area="reports">
+                        <i class="fas fa-file-alt mr-3"></i>
+                        Reports
+                    </a>
+                </div>
+            </nav>
+        </div>
+        <!-- @END_COMPONENT: Sidebar -->
+
+        <!-- @COMPONENT: MainContent [main application area] -->
+        <div class="flex-1 lg:ml-0">
+            <!-- @COMPONENT: TopBar [header with search and actions] -->
+            <header class="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <button class="lg:hidden text-gray-500" id="sidebar-toggle">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                        <div class="relative">
+                            <input type="text" placeholder="Search items..." 
+                                   class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent w-64"
+                                   data-implementation="Should search across all storage areas">
+                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button class="bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                                data-event="click:openAddItemModal">
+                            <i class="fas fa-plus mr-2"></i>Add Item
+                        </button>
+                        <button class="text-gray-500 hover:text-gray-700 p-2">
+                            <i class="fas fa-bell text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+            <!-- @END_COMPONENT: TopBar -->
+
+            <!-- @COMPONENT: DashboardOverview [main dashboard content] -->
+            <main class="p-6" id="main-content">
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Total Items</p>
+                                <p class="text-2xl font-bold text-gray-900" data-bind="stats.totalItems" data-mock="true">156</p>
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <i class="fas fa-boxes text-primary text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Low Stock Items</p>
+                                <p class="text-2xl font-bold text-danger" data-bind="stats.lowStockItems" data-mock="true">8</p>
+                            </div>
+                            <div class="bg-red-100 p-3 rounded-lg">
+                                <i class="fas fa-exclamation-triangle text-danger text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Pending Orders</p>
+                                <p class="text-2xl font-bold text-warning" data-bind="stats.pendingOrders" data-mock="true">3</p>
+                            </div>
+                            <div class="bg-yellow-100 p-3 rounded-lg">
+                                <i class="fas fa-clock text-warning text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Well Stocked</p>
+                                <p class="text-2xl font-bold text-success" data-bind="stats.wellStocked" data-mock="true">145</p>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-lg">
+                                <i class="fas fa-check-circle text-success text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alert Banner for Low Stock -->
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                    <div class="flex items-start">
+                        <i class="fas fa-exclamation-triangle text-danger text-lg mt-0.5 mr-3"></i>
+                        <div class="flex-1">
+                            <h3 class="text-sm font-medium text-red-800">8 items need immediate attention</h3>
+                            <p class="text-sm text-red-700 mt-1">Several items are below minimum stock levels. Review your inventory and place orders to avoid stockouts.</p>
+                        </div>
+                        <button class="text-red-700 hover:text-red-900 font-medium text-sm ml-4"
+                                data-event="click:goToOrderPage">
+                            View Items <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Storage Areas Quick View -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- @MAP: storageAreas.map(area => ( -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                        <div class="p-6 border-b border-gray-100">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-gray-900" data-bind="area.name" data-mock="true">Dry Storage</h3>
+                                <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full" data-mock="true">3 Low</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-600">Paper Goods</span>
+                                    <span class="font-medium" data-mock="true">12 items</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-600">Dry Ingredients</span>
+                                    <span class="font-medium" data-mock="true">24 items</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-600">Canned Goods</span>
+                                    <span class="font-medium" data-mock="true">18 items</span>
+                                </div>
+                            </div>
+                            <button class="w-full mt-6 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-medium transition-colors"
+                                    data-event="click:viewStorageArea" data-area="dry-storage">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                        <div class="p-6 border-b border-gray-100">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-gray-900" data-mock="true">Cold Storage</h3>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full" data-mock="true">5 Low</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-600">Fresh Produce</span>
+                                    <span class="font-medium" data-mock="true">31 items</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-600">Dairy Products</span>
+                                    <span class="font-medium" data-mock="true">16 items</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-600">Sauces & Condiments</span>
+                                    <span class="font-medium" data-mock="true">22 items</span>
+                                </div>
+                            </div>
+                            <button class="w-full mt-6 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-medium transition-colors"
+                                    data-event="click:viewStorageArea" data-area="cold-storage">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                        <div class="p-6 border-b border-gray-100">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-gray-900" data-mock="true">Freezer</h3>
+                                <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full" data-mock="true">All Good</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-600">Frozen Meats</span>
+                                    <span class="font-medium" data-mock="true">19 items</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-600">Frozen Vegetables</span>
+                                    <span class="font-medium" data-mock="true">14 items</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-600">Ice Cream & Desserts</span>
+                                    <span class="font-medium" data-mock="true">8 items</span>
+                                </div>
+                            </div>
+                            <button class="w-full mt-6 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-medium transition-colors"
+                                    data-event="click:viewStorageArea" data-area="freezer">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                    <!-- @END_MAP )) -->
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                    <div class="p-6 border-b border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-900">Recent Inventory Updates</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <!-- @MAP: recentActivities.map(activity => ( -->
+                            <div class="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg" data-mock="true">
+                                <div class="flex-shrink-0">
+                                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-edit text-primary text-sm"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900">Updated: Tomatoes (Cold Storage)</p>
+                                    <p class="text-sm text-gray-500">Quantity changed from 12 to 8 lbs</p>
+                                </div>
+                                <div class="text-xs text-gray-400" data-mock="true">2 mins ago</div>
+                            </div>
+
+                            <div class="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg" data-mock="true">
+                                <div class="flex-shrink-0">
+                                    <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-exclamation-triangle text-danger text-sm"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900">Low Stock Alert: Napkins (Dry Storage)</p>
+                                    <p class="text-sm text-gray-500">Current: 2 packs, Minimum: 5 packs</p>
+                                </div>
+                                <div class="text-xs text-gray-400" data-mock="true">5 mins ago</div>
+                            </div>
+
+                            <div class="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg" data-mock="true">
+                                <div class="flex-shrink-0">
+                                    <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-plus text-success text-sm"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900">Added: Premium Olive Oil (Dry Storage)</p>
+                                    <p class="text-sm text-gray-500">Initial quantity: 6 bottles</p>
+                                </div>
+                                <div class="text-xs text-gray-400" data-mock="true">1 hour ago</div>
+                            </div>
+                            <!-- @END_MAP )) -->
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <!-- @END_COMPONENT: DashboardOverview -->
+
+            <!-- @COMPONENT: StorageAreaView [detailed view of specific storage area] -->
+            <div class="p-6 hidden" id="storage-area-view">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900" id="area-title" data-mock="true">Dry Storage</h1>
+                        <p class="text-gray-600 mt-1" id="area-subtitle" data-mock="true">54 items • 3 categories • 3 low stock alerts</p>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium"
+                                data-event="click:exportInventory">
+                            <i class="fas fa-download mr-2"></i>Export
+                        </button>
+                        <button class="bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700"
+                                data-event="click:addCategory">
+                            <i class="fas fa-plus mr-2"></i>Add Category
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filter and Sort Controls -->
+                <div class="bg-white rounded-lg border border-gray-200 p-4 mb-6">
+                    <div class="flex flex-wrap items-center gap-4">
+                        <div class="relative">
+                            <select class="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option data-mock="true">All Categories</option>
+                                <option data-mock="true">Paper Goods</option>
+                                <option data-mock="true">Dry Ingredients</option>
+                                <option data-mock="true">Canned Goods</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-3 top-3 text-gray-400 pointer-events-none"></i>
+                        </div>
+                        
+                        <div class="relative">
+                            <select class="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option data-mock="true">All Stock Levels</option>
+                                <option data-mock="true">Low Stock Only</option>
+                                <option data-mock="true">Well Stocked</option>
+                                <option data-mock="true">Overstocked</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-3 top-3 text-gray-400 pointer-events-none"></i>
+                        </div>
+
+                        <div class="flex items-center space-x-2 ml-auto">
+                            <button class="p-2 text-gray-400 hover:text-gray-600" title="Grid View">
+                                <i class="fas fa-th"></i>
+                            </button>
+                            <button class="p-2 text-primary" title="List View">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inventory Items by Category -->
+                <div class="space-y-8">
+                    <!-- Paper Goods Category -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                        <div class="p-6 border-b border-gray-100">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <h3 class="text-lg font-semibold text-gray-900" data-mock="true">Paper Goods</h3>
+                                    <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full" data-mock="true">2 Low</span>
+                                </div>
+                                <button class="text-gray-400 hover:text-gray-600" data-event="click:toggleCategory">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Minimum</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <!-- @MAP: categoryItems.map(item => ( -->
+                                    <tr data-mock="true">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div>
+                                                    <div class="text-sm font-medium text-gray-900">Napkins (Pack)</div>
+                                                    <div class="text-sm text-gray-500">SKU: NPK-001</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <input type="number" value="2" class="w-16 px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary focus:border-transparent"
+                                                       data-event="change:updateQuantity" data-implementation="Should validate and update quantity">
+                                                <span class="ml-2 text-sm text-gray-500">packs</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">5 packs</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                <i class="fas fa-exclamation-triangle mr-1"></i>Low Stock
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                            <button class="text-primary hover:text-blue-700" data-event="click:editItem">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="text-gray-400 hover:text-gray-600">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <tr data-mock="true">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div>
+                                                    <div class="text-sm font-medium text-gray-900">Paper Cups (Stack)</div>
+                                                    <div class="text-sm text-gray-500">SKU: CUP-002</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <input type="number" value="3" class="w-16 px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                                                <span class="ml-2 text-sm text-gray-500">stacks</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">8 stacks</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                <i class="fas fa-exclamation-triangle mr-1"></i>Low Stock
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                            <button class="text-primary hover:text-blue-700">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="text-gray-400 hover:text-gray-600">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <tr data-mock="true">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div>
+                                                    <div class="text-sm font-medium text-gray-900">Takeout Containers (Pack)</div>
+                                                    <div class="text-sm text-gray-500">SKU: TOC-003</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <input type="number" value="15" class="w-16 px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                                                <span class="ml-2 text-sm text-gray-500">packs</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">10 packs</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                <i class="fas fa-check-circle mr-1"></i>Good Stock
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                            <button class="text-primary hover:text-blue-700">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="text-gray-400 hover:text-gray-600">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <!-- @END_MAP )) -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: StorageAreaView -->
+
+            <!-- @COMPONENT: OrderNowPage [central ordering interface] -->
+            <div class="p-6 hidden" id="order-now-view">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">Order Now</h1>
+                        <p class="text-gray-600 mt-1" data-mock="true">8 items below minimum stock levels across all storage areas</p>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium"
+                                data-event="click:exportOrderList">
+                            <i class="fas fa-download mr-2"></i>Export List
+                        </button>
+                        <button class="bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700"
+                                data-event="click:processOrder" data-implementation="Should handle order processing workflow">
+                            <i class="fas fa-shopping-cart mr-2"></i>Process Order
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-lg p-6 mb-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold text-red-800">Critical Stock Alert</h3>
+                            <p class="text-red-700 mt-1">Multiple items require immediate reordering to prevent stockouts</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-red-800" data-mock="true">8</div>
+                            <div class="text-sm text-red-600">Items to Order</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Items to Order by Storage Area -->
+                <div class="space-y-6">
+                    <!-- Dry Storage Orders -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                        <div class="p-6 border-b border-gray-100">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-gray-900">Dry Storage</h3>
+                                <span class="bg-red-100 text-red-800 text-sm font-medium px-3 py-1 rounded-full" data-mock="true">3 Items</span>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary" data-event="change:selectAllDryStorage">
+                                        </th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Minimum</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Suggested Order</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supplier</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <!-- @MAP: lowStockItems.filter(item => item.area === 'dry').map(item => ( -->
+                                    <tr data-mock="true">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <input type="checkbox" checked class="rounded border-gray-300 text-primary focus:ring-primary">
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="w-2 h-2 bg-danger rounded-full mr-3"></div>
+                                                <div>
+                                                    <div class="text-sm font-medium text-gray-900">Napkins (Pack)</div>
+                                                    <div class="text-sm text-gray-500">Paper Goods • SKU: NPK-001</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-danger font-medium">2 packs</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">5 packs</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <input type="number" value="10" class="w-20 px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                                            <span class="ml-2 text-sm text-gray-500">packs</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" data-mock="true">Restaurant Supply Co.</td>
+                                    </tr>
+
+                                    <tr data-mock="true">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <input type="checkbox" checked class="rounded border-gray-300 text-primary focus:ring-primary">
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="w-2 h-2 bg-danger rounded-full mr-3"></div>
+                                                <div>
+                                                    <div class="text-sm font-medium text-gray-900">Paper Cups (Stack)</div>
+                                                    <div class="text-sm text-gray-500">Paper Goods • SKU: CUP-002</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-danger font-medium">3 stacks</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">8 stacks</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <input type="number" value="15" class="w-20 px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                                            <span class="ml-2 text-sm text-gray-500">stacks</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" data-mock="true">Restaurant Supply Co.</td>
+                                    </tr>
+
+                                    <tr data-mock="true">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <input type="checkbox" checked class="rounded border-gray-300 text-primary focus:ring-primary">
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="w-2 h-2 bg-warning rounded-full mr-3"></div>
+                                                <div>
+                                                    <div class="text-sm font-medium text-gray-900">All-Purpose Flour (50lb)</div>
+                                                    <div class="text-sm text-gray-500">Dry Ingredients • SKU: FLR-001</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-warning font-medium">1 bag</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">3 bags</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <input type="number" value="5" class="w-20 px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                                            <span class="ml-2 text-sm text-gray-500">bags</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" data-mock="true">Food Distributors Inc.</td>
+                                    </tr>
+                                    <!-- @END_MAP )) -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Cold Storage Orders -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                        <div class="p-6 border-b border-gray-100">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-gray-900">Cold Storage</h3>
+                                <span class="bg-yellow-100 text-yellow-800 text-sm font-medium px-3 py-1 rounded-full" data-mock="true">5 Items</span>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
+                                        </th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Minimum</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Suggested Order</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supplier</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr data-mock="true">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <input type="checkbox" checked class="rounded border-gray-300 text-primary focus:ring-primary">
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="w-2 h-2 bg-warning rounded-full mr-3"></div>
+                                                <div>
+                                                    <div class="text-sm font-medium text-gray-900">Fresh Tomatoes</div>
+                                                    <div class="text-sm text-gray-500">Fresh Produce • SKU: TOM-001</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-warning font-medium">8 lbs</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">15 lbs</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <input type="number" value="20" class="w-20 px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                                            <span class="ml-2 text-sm text-gray-500">lbs</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" data-mock="true">Fresh Farm Produce</td>
+                                    </tr>
+                                    <!-- Additional cold storage items would be mapped here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: OrderNowPage -->
+        </div>
+        <!-- @END_COMPONENT: MainContent -->
+    </div>
+    <!-- @END_COMPONENT: AppShell -->
+
+    <!-- @COMPONENT: AddItemModal [modal for adding new inventory items] -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden" id="add-item-modal">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-md">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">Add New Item</h3>
+                    <button class="text-gray-400 hover:text-gray-600" data-event="click:closeAddItemModal">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <form class="p-6 space-y-4" data-event="submit:addNewItem" data-implementation="Should validate and create new inventory item">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Item Name</label>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" 
+                           placeholder="e.g., Chicken Breast" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Storage Area</label>
+                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" required>
+                        <option value="">Select storage area</option>
+                        <option value="dry-storage">Dry Storage</option>
+                        <option value="cold-storage">Cold Storage</option>
+                        <option value="freezer">Freezer</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" required>
+                        <option value="">Select category</option>
+                        <option value="meats" data-mock="true">Meats</option>
+                        <option value="vegetables" data-mock="true">Vegetables</option>
+                        <option value="dairy" data-mock="true">Dairy</option>
+                    </select>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Current Quantity</label>
+                        <input type="number" min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" 
+                               placeholder="0" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Level</label>
+                        <input type="number" min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" 
+                               placeholder="0" required>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Unit</label>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" 
+                           placeholder="e.g., lbs, packs, pieces" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">SKU (Optional)</label>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" 
+                           placeholder="e.g., CHK-001">
+                </div>
+                
+                <div class="flex space-x-3 pt-4">
+                    <button type="button" class="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+                            data-event="click:closeAddItemModal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 bg-primary text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                        Add Item
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: AddItemModal -->
+
+    <script>
+        (function() {
+            // Navigation between views
+            function showView(viewId) {
+                // Hide all views
+                document.getElementById('main-content').classList.add('hidden');
+                document.getElementById('storage-area-view').classList.add('hidden');
+                document.getElementById('order-now-view').classList.add('hidden');
+                
+                // Show selected view
+                document.getElementById(viewId).classList.remove('hidden');
+            }
+
+            // Sidebar navigation
+            document.querySelectorAll('[data-area]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Update active state
+                    document.querySelectorAll('[data-area]').forEach(l => {
+                        l.classList.remove('text-primary', 'bg-blue-50');
+                        l.classList.add('text-gray-700');
+                    });
+                    this.classList.add('text-primary', 'bg-blue-50');
+                    this.classList.remove('text-gray-700');
+                    
+                    const area = this.getAttribute('data-area');
+                    
+                    if (area === 'overview') {
+                        showView('main-content');
+                    } else if (area === 'order-now') {
+                        showView('order-now-view');
+                    } else {
+                        // Show storage area view
+                        showView('storage-area-view');
+                        
+                        // Update area title based on selection
+                        const titles = {
+                            'dry-storage': 'Dry Storage',
+                            'cold-storage': 'Cold Storage',
+                            'freezer': 'Freezer'
+                        };
+                        document.getElementById('area-title').textContent = titles[area] || 'Storage Area';
+                    }
+                });
+            });
+
+            // Mobile sidebar toggle
+            document.getElementById('sidebar-toggle').addEventListener('click', function() {
+                const sidebar = document.getElementById('sidebar');
+                sidebar.classList.toggle('hidden');
+            });
+
+            // Add item modal
+            document.querySelector('[data-event="click:openAddItemModal"]').addEventListener('click', function() {
+                document.getElementById('add-item-modal').classList.remove('hidden');
+            });
+
+            document.querySelectorAll('[data-event="click:closeAddItemModal"]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.getElementById('add-item-modal').classList.add('hidden');
+                });
+            });
+
+            // Close modal on backdrop click
+            document.getElementById('add-item-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                }
+            });
+
+            // TODO: Implement business logic for:
+            // - Real-time inventory updates
+            // - Automatic low stock detection
+            // - Order processing workflow
+            // - Data persistence and API integration
+            // - Search and filtering functionality
+            // - Export capabilities
+            // - Reporting and analytics
+        })();
+    </script>
+</body>
+</html>
